@@ -1,3 +1,3 @@
-## Java chess 
-#implimentation of the classic game of chess using java
+# Java chess 
+### implimentation of the classic game of chess using java
 
