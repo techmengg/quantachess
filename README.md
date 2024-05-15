@@ -1,2 +1,2 @@
-# EmotiVision
-a facial emotion recoginition model.
+# Cognitive Connect: AI Powered
+
