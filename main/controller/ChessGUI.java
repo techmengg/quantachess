@@ -14,7 +14,7 @@ public class ChessGUI {
     private Image[][] chessPieceImages = new Image[2][6];
     private JPanel chessBoard;
     private final JLabel message = new JLabel(
-            "Chess Champ is ready to play!");
+            "Byte Board is ready to play!");
     private static final String COLS = "ABCDEFGH";
     public static final int QUEEN = 0, KING = 1,
             ROOK = 2, KNIGHT = 3, BISHOP = 4, PAWN = 5;
@@ -184,6 +184,14 @@ public class ChessGUI {
             chessBoardSquares[ii][7].setIcon(new ImageIcon(
                     chessPieceImages[WHITE][STARTING_ROW[ii]]));
         }
+
+        for  (int i = 0; i < chessBoardSquares[0].length; i++) {
+            for (int j = 0; j < chessBoardSquares.length; i++) {
+                    System.err.println(chessBoardSquares[i][j]);
+
+            }
+        }
+        
     }
 
     public static void main(String[] args) {
