@@ -1,4 +1,5 @@
 package main.controller;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -22,6 +23,11 @@ public class ChessGUI {
         ROOK, KNIGHT, BISHOP, KING, QUEEN, BISHOP, KNIGHT, ROOK
     };
     public static final int BLACK = 0, WHITE = 1;
+
+    private JButton selectedButton = null;  // To keep track of the selected piece
+    private int selectedRow = -1;  // Row of the selected piece
+    private int selectedCol = -1;  // Column of the selected piece
+    private boolean whiteTurn = true;  // Track whose turn it is
 
     ChessGUI() {
         initializeGui();
@@ -55,12 +61,6 @@ public class ChessGUI {
 
         chessBoard = new JPanel(new GridLayout(0, 9)) {
 
-            /**
-             * Override the preferred size to return the largest it can, in
-             * a square shape.  Must (must, must) be added to a GridBagLayout
-             * as the only component (it uses the parent as a guide to size)
-             * with no GridBagConstaint (so it is centered).
-             */
             @Override
             public final Dimension getPreferredSize() {
                 Dimension d = super.getPreferredSize();
@@ -68,10 +68,10 @@ public class ChessGUI {
                 Component c = getParent();
                 if (c == null) {
                     prefSize = new Dimension(
-                            (int)d.getWidth(),(int)d.getHeight());
-                } else if (c!=null &&
-                        c.getWidth()>d.getWidth() &&
-                        c.getHeight()>d.getHeight()) {
+                            (int)d.getWidth(), (int)d.getHeight());
+                } else if (c != null &&
+                        c.getWidth() > d.getWidth() &&
+                        c.getHeight() > d.getHeight()) {
                     prefSize = c.getSize();
                 } else {
                     prefSize = d;
@@ -79,66 +79,103 @@ public class ChessGUI {
                 int w = (int) prefSize.getWidth();
                 int h = (int) prefSize.getHeight();
                 // the smaller of the two sizes
-                int s = (w>h ? h : w);
-                return new Dimension(s,s);
+                int s = (w > h ? h : w);
+                return new Dimension(s, s);
             }
         };
         chessBoard.setBorder(new CompoundBorder(
-                new EmptyBorder(8,8,8,8),
+                new EmptyBorder(8, 8, 8, 8),
                 new LineBorder(Color.BLACK)
-                ));
-        // Set the BG to be ochre
-        Color ochre = new Color(204,119,34);
+        ));
+        Color ochre = new Color(204, 119, 34);
         chessBoard.setBackground(ochre);
         JPanel boardConstrain = new JPanel(new GridBagLayout());
         boardConstrain.setBackground(ochre);
         boardConstrain.add(chessBoard);
         gui.add(boardConstrain);
 
-        // create the chess board squares
         Insets buttonMargin = new Insets(0, 0, 0, 0);
         for (int ii = 0; ii < chessBoardSquares.length; ii++) {
             for (int jj = 0; jj < chessBoardSquares[ii].length; jj++) {
                 JButton b = new JButton();
                 b.setMargin(buttonMargin);
-                // our chess pieces are 64x64 px in size, so we'll
-                // 'fill this in' using a transparent icon..
                 ImageIcon icon = new ImageIcon(
                         new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
                 b.setIcon(icon);
                 if ((jj % 2 == 1 && ii % 2 == 1)
-                        //) {
                         || (jj % 2 == 0 && ii % 2 == 0)) {
                     b.setBackground(Color.WHITE);
                 } else {
                     b.setBackground(Color.BLACK);
                 }
+
+                final int x = ii; // create a final copy of ii
+                final int y = jj; // create a final copy of jj
+
+                b.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        buttonClicked(b, x, y); // use the final variables
+                    }
+                });
                 chessBoardSquares[jj][ii] = b;
             }
         }
 
-        /*
-         * fill the chess board
-         */
         chessBoard.add(new JLabel(""));
-        // fill the top row
         for (int ii = 0; ii < 8; ii++) {
             chessBoard.add(
                     new JLabel(COLS.substring(ii, ii + 1),
-                    SwingConstants.CENTER));
+                            SwingConstants.CENTER));
         }
-        // fill the black non-pawn piece row
         for (int ii = 0; ii < 8; ii++) {
             for (int jj = 0; jj < 8; jj++) {
                 switch (jj) {
                     case 0:
-                        chessBoard.add(new JLabel("" + (9-(ii + 1)),
+                        chessBoard.add(new JLabel("" + (9 - (ii + 1)),
                                 SwingConstants.CENTER));
                     default:
                         chessBoard.add(chessBoardSquares[jj][ii]);
                 }
             }
         }
+    }
+
+    private void buttonClicked(JButton b, int row, int col) {
+        ImageIcon icon = (ImageIcon) b.getIcon();
+        System.out.println(whiteTurn);
+        if (selectedButton == null) {
+            // No piece selected yet, select this piece if it matches the current player's turn
+            if (icon.getImage() != null && isWhitePiece(icon) == whiteTurn) {
+                selectedButton = b;
+                selectedRow = row;
+                selectedCol = col;
+                
+            }
+        } 
+        else {
+            // Move the piece to the new position
+            chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
+            selectedButton.setIcon(new ImageIcon(
+                    new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+            selectedButton = null;
+            selectedRow = -1;
+            selectedCol = -1;
+            whiteTurn = !whiteTurn; // Switch turns
+            message.setText(whiteTurn ? "White's turn" : "Black's turn");
+        }
+    }
+
+    private boolean isWhitePiece(ImageIcon icon) {
+        // Determine if the piece is white based on the icon
+        // Assuming piece images are arranged in a specific order
+        Image image = icon.getImage();
+        for (int i = 0; i < 6; i++) {
+            if (chessPieceImages[WHITE][i] == image) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public final JComponent getGui() {
@@ -160,13 +197,10 @@ public class ChessGUI {
             System.exit(1);
         }
     }
-    
-    /**
-     * Initializes the icons of the initial chess board piece places
-     */
+
     private final void setupNewGame() {
         message.setText("Make your move!");
-        // set up the black pieces
+        whiteTurn = true; // Reset turn to white at the start of a new game
         for (int ii = 0; ii < STARTING_ROW.length; ii++) {
             chessBoardSquares[ii][0].setIcon(new ImageIcon(
                     chessPieceImages[BLACK][STARTING_ROW[ii]]));
@@ -175,7 +209,6 @@ public class ChessGUI {
             chessBoardSquares[ii][1].setIcon(new ImageIcon(
                     chessPieceImages[BLACK][PAWN]));
         }
-        // set up the white pieces
         for (int ii = 0; ii < STARTING_ROW.length; ii++) {
             chessBoardSquares[ii][6].setIcon(new ImageIcon(
                     chessPieceImages[WHITE][PAWN]));
@@ -195,22 +228,13 @@ public class ChessGUI {
 
                 JFrame f = new JFrame("ByteBoard");
                 f.add(cg.getGui());
-                // Ensures JVM closes after frame(s) closed and
-                // all non-daemon threads are finished
                 f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                // See https://stackoverflow.com/a/7143398/418556 for demo.
                 f.setLocationByPlatform(true);
-
-                // ensures the frame is the minimum size it needs to be
-                // in order display the components within it
                 f.pack();
-                // ensures the minimum size is enforced.
                 f.setMinimumSize(f.getSize());
                 f.setVisible(true);
             }
         };
-        // Swing GUIs should be created and updated on the EDT
-        // http://docs.oracle.com/javase/tutorial/uiswing/concurrency
         SwingUtilities.invokeLater(r);
     }
 }
