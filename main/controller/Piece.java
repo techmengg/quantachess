@@ -4,11 +4,13 @@ public class Piece
 {
     private int row;
     private int col;
+    private boolean color;
 
-    public Piece(int r, int c)
+    public Piece(int r, int c, boolean turn)
     {
         row = r;
         col = c;
+        color = turn; // true : white and false : black
     }
 
     public int getRow()
