@@ -6,6 +6,6 @@ public class Board
 
     public Board()
     {
-        chessBoard  
+          
     }
 }

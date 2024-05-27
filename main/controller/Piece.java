@@ -6,6 +6,13 @@ public class Piece
     private int col;
     private boolean color;
 
+    public Piece() 
+    {
+        row = 0;
+        col = 0;
+        color = true;
+    }
+
     public Piece(int r, int c, boolean turn)
     {
         row = r;
@@ -21,6 +28,11 @@ public class Piece
     public int getCol()
     {
         return col;
+    }
+
+    public boolean getColor()
+    {
+        return color;
     }
 
     public void setRow(int r)
