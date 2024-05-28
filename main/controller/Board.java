@@ -45,5 +45,10 @@ public class Board
         chessBoard[6][7] = new Pawn(true);     
     }
 
+    public boolean validate(int r1, int c1, int r2, int c2)
+    {
+        return chessBoard[r1][c1].canMove(r2, c2);
+    }
+
 
 }

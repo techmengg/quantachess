@@ -19,6 +19,7 @@ public class ChessGUI {
     private static final int QUEEN = 0, KING = 1, ROOK = 2, KNIGHT = 3, BISHOP = 4, PAWN = 5;
     private static final int[] STARTING_ROW = { ROOK, KNIGHT, BISHOP, KING, QUEEN, BISHOP, KNIGHT, ROOK };
     private static final int BLACK = 0, WHITE = 1;
+    private static Board chess = new Board();
 
     private JButton selectedButton = null;  // To keep track of the selected piece
     private int selectedRow = -1;  // Row of the selected piece
@@ -131,8 +132,7 @@ public class ChessGUI {
         } else  {
             // Move the piece to the new position
             System.out.println(selectedRow + "/" + selectedCol + " to " + row  + "/" + col);
-            Piece piece = new Piece(true);
-            if (piece.validate(row, col))
+            if (chess.validate(selectedRow, selectedCol, row, col))
             {  
                 chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
                 selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
