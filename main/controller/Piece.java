@@ -19,7 +19,7 @@ public class Piece
         return color;
     }
 
-    public Boolean canMove(int r1, int c1, int r2, int c2)
+    public boolean canMove(int r1, int c1, int r2, int c2)
     {
         return true;
     }
