@@ -2,8 +2,8 @@ package main.controller;
 
 public class Queen extends Piece
 {
-    public Queen()
+    public Queen(boolean color)
     {
-        
+        super(color);   
     }
 }

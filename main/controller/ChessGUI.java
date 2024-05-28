@@ -131,7 +131,7 @@ public class ChessGUI {
         } else  {
             // Move the piece to the new position
             System.out.println(selectedRow + "/" + selectedCol + " to " + row  + "/" + col);
-            Piece piece = new Piece(selectedRow, selectedCol, true);
+            Piece piece = new Piece(true);
             if (piece.validate(row, col))
             {  
                 chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
