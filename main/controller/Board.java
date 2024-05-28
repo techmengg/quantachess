@@ -47,7 +47,7 @@ public class Board
 
     public boolean validate(int r1, int c1, int r2, int c2)
     {
-        return chessBoard[r1][c1].canMove(r2, c2);
+        return chessBoard[r1][c1].canMove(r1, c2, r2, c2);
     }
 
 
