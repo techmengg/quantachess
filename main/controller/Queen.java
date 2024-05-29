@@ -10,6 +10,13 @@ public class Queen extends Piece {
             return false; // Same position
         }
 
+        if (chessboard[r2][c2] != null) {
+            if (chessboard[r1][c1].getColor() == chessboard[r2][c2].getColor())
+            {
+                return false;
+            }
+        }
+
         if (r1 == r2) { // Check for horizontal movement
             return isHorizontalClear(r1, c1, c2, chessboard);
         }
