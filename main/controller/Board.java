@@ -70,6 +70,5 @@ public class Board
     {
         return chessBoard;
     }
-    
 
 }

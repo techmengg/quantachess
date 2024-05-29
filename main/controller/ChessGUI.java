@@ -145,9 +145,11 @@ public class ChessGUI {
     private void buttonClicked(JButton b, int row, int col) {
         if (selectedButton == null) {
             // No piece selected yet, select this piece
-            selectedButton = b;
-            selectedRow = row;
-            selectedCol = col;
+            if (chess.getChessBoard()[row][col]  != null) {
+                selectedButton = b;
+                selectedRow = row;
+                selectedCol = col;
+            }
         } else if (chess.validate(selectedRow, selectedCol, row, col, chess.getChessBoard(), turn)) {
             // Move the piece to the new position
             System.out.println(selectedRow + "/" + selectedCol + " to " + row + "/" + col);
