@@ -19,9 +19,9 @@ public class Piece
         return color;
     }
 
-    public boolean canMove(int r1, int c1, int r2, int c2)
+    public boolean canMove(int r1, int c1, int r2, int c2, Piece[][] chessboard)
     {
-        return true;
+        return false;
     }
 
     

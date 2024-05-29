@@ -20,6 +20,7 @@ public class ChessGUI {
     private static final int[] STARTING_ROW = { ROOK, KNIGHT, BISHOP, KING, QUEEN, BISHOP, KNIGHT, ROOK };
     private static final int BLACK = 0, WHITE = 1;
     private static Board chess = new Board();
+    private static boolean turn = true;
 
     private JButton selectedButton = null;  // To keep track of the selected piece
     private int selectedRow = -1;  // Row of the selected piece
@@ -46,7 +47,7 @@ public class ChessGUI {
             }
         };
         tools.add(newGameAction);
-        tools.add(new JButton("Undo")); // TODO - add functionality!
+        //tools.add(new JButton("Undo")); // TODO - add functionality!
         tools.addSeparator();
         tools.add(message);
 
@@ -129,18 +130,21 @@ public class ChessGUI {
             selectedButton = b;
             selectedRow = row;
             selectedCol = col;
-        } else  {
+        } else if (chess.validate(selectedRow, selectedCol, row, col, chess.getChessBoard(), turn)) {
             // Move the piece to the new position
             System.out.println(selectedRow + "/" + selectedCol + " to " + row  + "/" + col);
-            if (chess.validate(selectedRow, selectedCol, row, col))
-            {  
-                chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
-                selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
-                selectedButton = null;
-                selectedRow = -1;
-                selectedCol = -1;
-            }
-            
+            chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
+            selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+            selectedButton = null;
+            selectedRow = -1;
+            selectedCol = -1;
+            turn = !turn;
+        }
+        else
+        {
+            selectedButton = null;
+            selectedRow = -1;
+            selectedCol = -1;
         }
     }
 
@@ -163,21 +167,42 @@ public class ChessGUI {
         }
     }
 
-    private final void setupNewGame() {
+        private final void setupNewGame() {
         message.setText("Make your move!");
+
+        // Reset the board pieces to their initial positions
+        for (int ii = 0; ii < 8; ii++) {
+            for (int jj = 0; jj < 8; jj++) {
+                chessBoardSquares[ii][jj].setIcon(null);  // Clear all icons
+            }
+        }
+
+        // Set up black pieces
         for (int ii = 0; ii < STARTING_ROW.length; ii++) {
             chessBoardSquares[ii][0].setIcon(new ImageIcon(chessPieceImages[BLACK][STARTING_ROW[ii]]));
         }
         for (int ii = 0; ii < STARTING_ROW.length; ii++) {
             chessBoardSquares[ii][1].setIcon(new ImageIcon(chessPieceImages[BLACK][PAWN]));
         }
+
+        // Set up white pieces
         for (int ii = 0; ii < STARTING_ROW.length; ii++) {
             chessBoardSquares[ii][6].setIcon(new ImageIcon(chessPieceImages[WHITE][PAWN]));
         }
         for (int ii = 0; ii < STARTING_ROW.length; ii++) {
             chessBoardSquares[ii][7].setIcon(new ImageIcon(chessPieceImages[WHITE][STARTING_ROW[ii]]));
         }
+
+        // Reset turn and selected piece variables
+        turn = true;
+        selectedButton = null;
+        selectedRow = -1;
+        selectedCol = -1;
+
+        // Reset the board in the model
+        chess = new Board();
     }
+
 
     public static void main(String[] args) {
         Runnable r = new Runnable() {
