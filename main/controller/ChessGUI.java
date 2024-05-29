@@ -36,33 +36,35 @@ public class ChessGUI {
 
         // set up the main GUI
         gui.setBorder(new EmptyBorder(5, 5, 5, 5));
+        gui.setBackground(new Color(43, 43, 43));
         JToolBar tools = new JToolBar();
         tools.setFloatable(false);
+        tools.setBackground(new Color(60, 63, 65));
+        tools.setForeground(Color.WHITE);
         gui.add(tools, BorderLayout.PAGE_START);
         Action newGameAction = new AbstractAction("New") {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 setupNewGame();
             }
         };
-        tools.add(newGameAction);
-        //tools.add(new JButton("Undo")); // TODO - add functionality!
+        JButton newGameButton = new JButton(newGameAction);
+        newGameButton.setBackground(new Color(60, 63, 65));
+        newGameButton.setForeground(Color.BLACK);
+        tools.add(newGameButton);
         tools.addSeparator();
+        message.setForeground(Color.WHITE);
         tools.add(message);
 
-        gui.add(new JLabel("?"), BorderLayout.LINE_START);
-
         chessBoard = new JPanel(new GridLayout(0, 9)) {
-
             @Override
             public final Dimension getPreferredSize() {
                 Dimension d = super.getPreferredSize();
-                Dimension prefSize = null;
+                Dimension prefSize;
                 Component c = getParent();
                 if (c == null) {
                     prefSize = new Dimension((int) d.getWidth(), (int) d.getHeight());
-                } else if (c != null && c.getWidth() > d.getWidth() && c.getHeight() > d.getHeight()) {
+                } else if (c.getWidth() > d.getWidth() && c.getHeight() > d.getHeight()) {
                     prefSize = c.getSize();
                 } else {
                     prefSize = d;
@@ -70,15 +72,14 @@ public class ChessGUI {
                 int w = (int) prefSize.getWidth();
                 int h = (int) prefSize.getHeight();
                 // the smaller of the two sizes
-                int s = (w > h ? h : w);
+                int s = Math.min(w, h);
                 return new Dimension(s, s);
             }
         };
-        chessBoard.setBorder(new CompoundBorder(new EmptyBorder(8, 8, 8, 8), new LineBorder(Color.BLACK)));
-        Color ochre = new Color(204, 119, 34);
-        chessBoard.setBackground(ochre);
+        chessBoard.setBorder(new CompoundBorder(new EmptyBorder(8, 8, 8, 8), new LineBorder(Color.DARK_GRAY)));
+        chessBoard.setBackground(new Color(43, 43, 43));
         JPanel boardConstrain = new JPanel(new GridBagLayout());
-        boardConstrain.setBackground(ochre);
+        boardConstrain.setBackground(new Color(43, 43, 43));
         boardConstrain.add(chessBoard);
         gui.add(boardConstrain);
 
@@ -87,14 +88,14 @@ public class ChessGUI {
             for (int jj = 0; jj < chessBoardSquares[ii].length; jj++) {
                 JButton b = new JButton();
                 b.setMargin(buttonMargin);
+                b.setFocusPainted(false);
                 ImageIcon icon = new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
                 b.setIcon(icon);
                 if ((jj % 2 == 1 && ii % 2 == 1) || (jj % 2 == 0 && ii % 2 == 0)) {
-                    b.setBackground(Color.WHITE);
+                    b.setBackground(new Color(170, 162, 58));
                 } else {
-                    b.setBackground(Color.BLACK);
+                    b.setBackground(new Color(58, 95, 170));
                 }
-
                 final int x = ii; // create a final copy of ii
                 final int y = jj; // create a final copy of jj
 
@@ -110,13 +111,17 @@ public class ChessGUI {
 
         chessBoard.add(new JLabel(""));
         for (int ii = 0; ii < 8; ii++) {
-            chessBoard.add(new JLabel(COLS.substring(ii, ii + 1), SwingConstants.CENTER));
+            JLabel label = new JLabel(COLS.substring(ii, ii + 1), SwingConstants.CENTER);
+            label.setForeground(Color.WHITE);
+            chessBoard.add(label);
         }
         for (int ii = 0; ii < 8; ii++) {
             for (int jj = 0; jj < 8; jj++) {
                 switch (jj) {
                     case 0:
-                        chessBoard.add(new JLabel("" + (9 - (ii + 1)), SwingConstants.CENTER));
+                        JLabel rowLabel = new JLabel("" + (9 - (ii + 1)), SwingConstants.CENTER);
+                        rowLabel.setForeground(Color.WHITE);
+                        chessBoard.add(rowLabel);
                     default:
                         chessBoard.add(chessBoardSquares[jj][ii]);
                 }
@@ -124,7 +129,7 @@ public class ChessGUI {
         }
     }
 
-    private void buttonClicked(JButton b, int row, int col) {     
+    private void buttonClicked(JButton b, int row, int col) {
         if (selectedButton == null) {
             // No piece selected yet, select this piece
             selectedButton = b;
@@ -132,16 +137,14 @@ public class ChessGUI {
             selectedCol = col;
         } else if (chess.validate(selectedRow, selectedCol, row, col, chess.getChessBoard(), turn)) {
             // Move the piece to the new position
-            System.out.println(selectedRow + "/" + selectedCol + " to " + row  + "/" + col);
+            System.out.println(selectedRow + "/" + selectedCol + " to " + row + "/" + col);
             chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
             selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
             selectedButton = null;
             selectedRow = -1;
             selectedCol = -1;
             turn = !turn;
-        }
-        else
-        {
+        } else {
             selectedButton = null;
             selectedRow = -1;
             selectedCol = -1;
@@ -167,7 +170,7 @@ public class ChessGUI {
         }
     }
 
-        private final void setupNewGame() {
+    private final void setupNewGame() {
         message.setText("Make your move!");
 
         // Reset the board pieces to their initial positions
@@ -203,10 +206,8 @@ public class ChessGUI {
         chess = new Board();
     }
 
-
     public static void main(String[] args) {
         Runnable r = new Runnable() {
-
             @Override
             public void run() {
                 ChessGUI cg = new ChessGUI();
@@ -223,3 +224,4 @@ public class ChessGUI {
         SwingUtilities.invokeLater(r);
     }
 }
+
