@@ -22,6 +22,7 @@ public class ChessGUI {
     private static Board chess = new Board();
     private static boolean turn = true;
 
+    private boolean isDarkMode = true;
     private JButton selectedButton = null;  // To keep track of the selected piece
     private int selectedRow = -1;  // Row of the selected piece
     private int selectedCol = -1;  // Column of the selected piece
@@ -40,7 +41,7 @@ public class ChessGUI {
         JToolBar tools = new JToolBar();
         tools.setFloatable(false);
         tools.setBackground(new Color(60, 63, 65));
-        tools.setForeground(Color.WHITE);
+        tools.setForeground(Color.BLACK);
         gui.add(tools, BorderLayout.PAGE_START);
         Action newGameAction = new AbstractAction("New") {
             @Override
@@ -49,9 +50,21 @@ public class ChessGUI {
             }
         };
         JButton newGameButton = new JButton(newGameAction);
-        newGameButton.setBackground(new Color(60, 63, 65));
+        newGameButton.setBackground(Color.WHITE);
         newGameButton.setForeground(Color.BLACK);
         tools.add(newGameButton);
+
+        Action toggleThemeAction = new AbstractAction("Theme") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                toggleTheme();
+            }
+        };
+        JButton toggleThemeButton = new JButton(toggleThemeAction);
+        toggleThemeButton.setBackground(new Color(60, 63, 65));
+        toggleThemeButton.setForeground(Color.BLACK);
+        tools.add(toggleThemeButton);
+
         tools.addSeparator();
         message.setForeground(Color.WHITE);
         tools.add(message);
@@ -206,12 +219,79 @@ public class ChessGUI {
         chess = new Board();
     }
 
+    private void toggleTheme() {
+        if (isDarkMode) {
+            // Switch to light mode
+            gui.setBackground(new Color(245, 245, 245));
+            chessBoard.setBackground(new Color(245, 245, 245));
+            for (int ii = 0; ii < chessBoardSquares.length; ii++) {
+                for (int jj = 0; jj < chessBoardSquares[ii].length; jj++) {
+                    if ((jj % 2 == 1 && ii % 2 == 1) || (jj % 2 == 0 && ii % 2 == 0)) {
+                        chessBoardSquares[jj][ii].setBackground(new Color(255, 255, 255));
+                    } else {
+                        chessBoardSquares[jj][ii].setBackground(new Color(192, 192, 192));
+                    }
+                }
+            }
+            for (Component c : chessBoard.getComponents()) {
+                if (c instanceof JLabel) {
+                    c.setForeground(Color.BLACK);
+                }
+            }
+            for (Component c : gui.getComponents()) {
+                if (c instanceof JToolBar) {
+                    JToolBar toolbar = (JToolBar) c;
+                    toolbar.setBackground(new Color(225, 225, 225));
+                    for (Component btn : toolbar.getComponents()) {
+                        if (btn instanceof JButton) {
+                            btn.setBackground(new Color(225, 225, 225));
+                            btn.setForeground(Color.BLACK);
+                        }
+                    }
+                }
+            }
+            message.setForeground(Color.BLACK);
+        } else {
+            // Switch to dark mode
+            gui.setBackground(new Color(43, 43, 43));
+            chessBoard.setBackground(new Color(43, 43, 43));
+            for (int ii = 0; ii < chessBoardSquares.length; ii++) {
+                for (int jj = 0; jj < chessBoardSquares[ii].length; jj++) {
+                    if ((jj % 2 == 1 && ii % 2 == 1) || (jj % 2 == 0 && ii % 2 == 0)) {
+                        chessBoardSquares[jj][ii].setBackground(new Color(170, 162, 58));
+                    } else {
+                        chessBoardSquares[jj][ii].setBackground(new Color(58, 95, 170));
+                    }
+                }
+            }
+            for (Component c : chessBoard.getComponents()) {
+                if (c instanceof JLabel) {
+                    c.setForeground(Color.WHITE);
+                }
+            }
+            for (Component c : gui.getComponents()) {
+                if (c instanceof JToolBar) {
+                    JToolBar toolbar = (JToolBar) c;
+                    toolbar.setBackground(new Color(60, 63, 65));
+                    for (Component btn : toolbar.getComponents()) {
+                        if (btn instanceof JButton) {
+                            btn.setBackground(Color.WHITE);
+                            btn.setForeground(Color.BLACK);
+                        }
+                    }
+                }
+            }
+            message.setForeground(Color.WHITE);
+        }
+        isDarkMode = !isDarkMode;
+    }
+    
+
     public static void main(String[] args) {
         Runnable r = new Runnable() {
             @Override
             public void run() {
                 ChessGUI cg = new ChessGUI();
-
                 JFrame f = new JFrame("ByteBoard");
                 f.add(cg.getGui());
                 f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -224,4 +304,3 @@ public class ChessGUI {
         SwingUtilities.invokeLater(r);
     }
 }
-
