@@ -67,6 +67,29 @@ public class Board
     {
         return chessBoard;
     }
-    
+
+    public int promote(int r, int c, Piece[][] board)
+    {
+        if (chessBoard[r][c] instanceof Pawn)
+        {
+            if (chessBoard[r][c].getColor())
+            {
+                if (r == 0)
+                {
+                    chessBoard[r][c] = new Queen(true);
+                    return 1;
+                }
+            }
+            else 
+            {
+                if (r == 7)
+                {
+                    chessBoard[r][c] = new Queen(false);
+                    return 2;
+                }
+            }
+        }
+        return 0;
+    }
 
 }
