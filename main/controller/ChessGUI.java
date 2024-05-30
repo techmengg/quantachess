@@ -5,7 +5,9 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.swing.border.*;
-import java.net.URL;
+
+//import java.net.URL; NOT NEEDED ANYMORE. We're using locally stored image instead.
+import java.io.File; // This is what we're now using.
 import javax.imageio.ImageIO;
 
 public class ChessGUI {
@@ -145,9 +147,11 @@ public class ChessGUI {
     private void buttonClicked(JButton b, int row, int col) {
         if (selectedButton == null) {
             // No piece selected yet, select this piece
-            selectedButton = b;
-            selectedRow = row;
-            selectedCol = col;
+            if (chess.getChessBoard()[row][col]  != null) {
+                selectedButton = b;
+                selectedRow = row;
+                selectedCol = col;
+            }
         } else if (chess.validate(selectedRow, selectedCol, row, col, chess.getChessBoard(), turn)) {
             // Move the piece to the new position
             System.out.println(selectedRow + "/" + selectedCol + " to " + row + "/" + col);
@@ -170,8 +174,9 @@ public class ChessGUI {
 
     private final void createImages() {
         try {
-            URL url = new URL("https://i.sstatic.net/memI0.png");
-            BufferedImage bi = ImageIO.read(url);
+            // Use a file object to read the image from the local file system
+            File file = new File("main/img/pieces.png");
+            BufferedImage bi = ImageIO.read(file);
             for (int ii = 0; ii < 2; ii++) {
                 for (int jj = 0; jj < 6; jj++) {
                     chessPieceImages[ii][jj] = bi.getSubimage(jj * 64, ii * 64, 64, 64);
