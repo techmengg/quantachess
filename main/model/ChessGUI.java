@@ -1,4 +1,4 @@
-package main.controller;
+package main.model;
 
 import java.awt.*;
 import java.awt.event.*;

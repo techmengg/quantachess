@@ -1,4 +1,4 @@
-package main.controller;
+package main.model;
 
 public class Piece 
 {

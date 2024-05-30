@@ -1,4 +1,4 @@
-package main.controller;
+package main.model;
 
 public class Knight extends Piece {
     public Knight(boolean color) {
