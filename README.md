@@ -1,3 +1,3 @@
-# ByteBoard: Java Chess w/ AI opponent
+# > ByteBoard ♟️
 implimentation of the classic game of chess using java
 
