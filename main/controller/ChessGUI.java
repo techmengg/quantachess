@@ -5,7 +5,6 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.swing.border.*;
-
 //import java.net.URL; NOT NEEDED ANYMORE. We're using locally stored image instead.
 import java.io.File; // This is what we're now using.
 import javax.imageio.ImageIO;
