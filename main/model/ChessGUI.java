@@ -301,7 +301,10 @@ public class ChessGUI {
             @Override
             public void run() {
                 ChessGUI cg = new ChessGUI();
-                JFrame f = new JFrame("ByteBoard");
+                JFrame f = new JFrame("ByteBoard");  
+                Image icon = Toolkit.getDefaultToolkit().getImage("main\\img\\chess.png"); 
+                icon = icon.getScaledInstance(512, 512, Image.SCALE_SMOOTH);
+                f.setIconImage(icon);  
                 f.add(cg.getGui());
                 f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 f.setLocationByPlatform(true);
