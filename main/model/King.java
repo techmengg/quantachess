@@ -1,8 +1,18 @@
 package main.model;
 
-public class King extends Piece {
-    public King(boolean color) {
-        super(color);
+public class King extends Piece { 
+
+    public static boolean hasMoved; //required for castling logic 
+
+    public King(boolean color) { 
+        super(color); 
+        hasMoved = false;
+    } 
+
+    public boolean gethasMoved()
+    {
+
+        return hasMoved;
     }
 
     @Override

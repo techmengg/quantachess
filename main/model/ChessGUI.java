@@ -157,15 +157,34 @@ public class ChessGUI {
             chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
             selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
             int promote = (chess.promote(row, col, chess.getChessBoard()));
-            if (promote == 1)
-                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[WHITE][KING]));
-            if (promote == 2)
-                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[BLACK][KING]));
+            if (promote == 1) 
+            {
+                 chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[WHITE][KING]));
+            }
+            
+            if (promote == 2)  
+            {
+                  chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[BLACK][KING]));
+            } 
+
+             
+            
+            
+            {
+
+            }
+              
             selectedButton = null;
             selectedRow = -1;
             selectedCol = -1;
-            turn = !turn;
-        } else {
+            turn = !turn; 
+
+            
+        }
+        else if(chess.getPiece(0,0).castle(selectedRow, selectedCol, row, col,chess.getChessBoard())) //castling methods 
+        {
+            
+        }else {
             selectedButton = null;
             selectedRow = -1;
             selectedCol = -1;
