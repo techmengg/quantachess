@@ -1,4 +1,4 @@
-# QuantaChess
+# > QuantaChess ♟️
 
 QuantaChess is a simple chess game implemented in Java with a graphical user interface (GUI).
 
