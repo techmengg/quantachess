@@ -22,6 +22,18 @@ QuantaChess is a simple chess game implemented in Java with a graphical user int
 
 6. **Toggle Theme:**
    - Click on the "Theme" button to switch between light and dark themes.
+  
+## Preview
+
+## Preview
+
+<div style="display: flex; justify-content: center;">
+  <img src="preview1.png" alt="Preview 1" width="400"/>
+  <img src="preview2.png" alt="Preview 2" width="400"/>
+</div>
+![Screenshot 2024-06-02 120801](https://github.com/techmengg/quantachess/assets/125338813/ec4ebced-6bb3-46cf-a0f2-fc0a9cd3ef35)
+![Screenshot 2024-06-02 120839](https://github.com/techmengg/quantachess/assets/125338813/b3d33cdd-f346-4d15-9567-ebbe8604bf3a)
+
 
 ## Controls
 
