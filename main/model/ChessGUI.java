@@ -14,7 +14,7 @@ public class ChessGUI {
     private JButton[][] chessBoardSquares = new JButton[8][8];
     private Image[][] chessPieceImages = new Image[2][6];
     private JPanel chessBoard;
-    private final JLabel message = new JLabel("Chess Champ is ready to play!");
+    private final JLabel message = new JLabel("QuantaChess is Ready to be Played!");
     private static final String COLS = "ABCDEFGH";
     private static final int QUEEN = 0, KING = 1, ROOK = 2, KNIGHT = 3, BISHOP = 4, PAWN = 5;
     private static final int[] STARTING_ROW = { ROOK, KNIGHT, BISHOP, KING, QUEEN, BISHOP, KNIGHT, ROOK };
@@ -288,7 +288,7 @@ public class ChessGUI {
             @Override
             public void run() {
                 ChessGUI cg = new ChessGUI();
-                JFrame f = new JFrame("ByteBoard");
+                JFrame f = new JFrame("QuantaChess");
                 f.add(cg.getGui());
                 f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 f.setLocationByPlatform(true);
