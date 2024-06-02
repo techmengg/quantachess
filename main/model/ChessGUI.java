@@ -30,7 +30,9 @@ public class ChessGUI {
 
     ChessGUI() {
         initializeGui();
+        toggleTheme(); // Set dark theme as default
     }
+    
 
     public final void initializeGui() {
         // create the images for the chess pieces
@@ -156,6 +158,11 @@ public class ChessGUI {
             System.out.println(selectedRow + "/" + selectedCol + " to " + row + "/" + col);
             chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
             selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+            int promote = (chess.promote(row, col, chess.getChessBoard()));
+            if (promote == 1)
+                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[WHITE][KING]));
+            if (promote == 2)
+                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[BLACK][KING]));
             selectedButton = null;
             selectedRow = -1;
             selectedCol = -1;
@@ -231,9 +238,9 @@ public class ChessGUI {
             for (int ii = 0; ii < chessBoardSquares.length; ii++) {
                 for (int jj = 0; jj < chessBoardSquares[ii].length; jj++) {
                     if ((jj % 2 == 1 && ii % 2 == 1) || (jj % 2 == 0 && ii % 2 == 0)) {
-                        chessBoardSquares[jj][ii].setBackground(new Color(255, 255, 255));
+                        chessBoardSquares[jj][ii].setBackground(new Color(255, 255, 255)); // White
                     } else {
-                        chessBoardSquares[jj][ii].setBackground(new Color(192, 192, 192));
+                        chessBoardSquares[jj][ii].setBackground(new Color(192, 192, 192)); // Gray
                     }
                 }
             }
@@ -262,9 +269,9 @@ public class ChessGUI {
             for (int ii = 0; ii < chessBoardSquares.length; ii++) {
                 for (int jj = 0; jj < chessBoardSquares[ii].length; jj++) {
                     if ((jj % 2 == 1 && ii % 2 == 1) || (jj % 2 == 0 && ii % 2 == 0)) {
-                        chessBoardSquares[jj][ii].setBackground(new Color(170, 162, 58));
+                        chessBoardSquares[jj][ii].setBackground(new Color(64, 64, 64)); // Dark gray
                     } else {
-                        chessBoardSquares[jj][ii].setBackground(new Color(58, 95, 170));
+                        chessBoardSquares[jj][ii].setBackground(new Color(32, 32, 32)); // Black
                     }
                 }
             }
@@ -288,7 +295,7 @@ public class ChessGUI {
             message.setForeground(Color.WHITE);
         }
         isDarkMode = !isDarkMode;
-    }
+    }      
     
 
     public static void main(String[] args) {
