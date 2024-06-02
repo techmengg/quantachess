@@ -28,8 +28,8 @@ QuantaChess is a simple chess game implemented in Java with a graphical user int
 ## Preview
 
 <div style="display: flex; justify-content: center;">
-  <img src="assets/Screenshot 2024-06-02 120801.png" alt="Screenshot 1" width="400"/>
-  <img src="assets/Screenshot 2024-06-02 120839.png" alt="Screenshot 2" width="400"/>
+  <img src="assets/chesswhite.png" alt="Screenshot 1" width="400"/>
+  <img src="assets/chessblack.png" alt="Screenshot 2" width="400"/>
 </div>
 
 
