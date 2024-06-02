@@ -5,8 +5,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.swing.border.*;
-//import java.net.URL; NOT NEEDED ANYMORE. We're using locally stored image instead.
-import java.io.File; // This is what we're now using.
+import java.io.File;
 import javax.imageio.ImageIO;
 
 public class ChessGUI {
@@ -23,53 +22,41 @@ public class ChessGUI {
     private static Board chess = new Board();
     private static boolean turn = true;
 
-    private boolean isDarkMode = true;
+    private boolean isDarkMode = true; // This should set default theme color to white
     private JButton selectedButton = null;  // To keep track of the selected piece
     private int selectedRow = -1;  // Row of the selected piece
     private int selectedCol = -1;  // Column of the selected piece
+
+    private JButton newButton;
+    private JButton themeButton;
 
     ChessGUI() {
         initializeGui();
         toggleTheme(); // Set dark theme as default
     }
-    
 
     public final void initializeGui() {
-        // create the images for the chess pieces
+        // Create the images for the chess pieces
         createImages();
 
-        // set up the main GUI
+        // Set up the main GUI
         gui.setBorder(new EmptyBorder(5, 5, 5, 5));
         gui.setBackground(new Color(43, 43, 43));
+        
         JToolBar tools = new JToolBar();
         tools.setFloatable(false);
         tools.setBackground(new Color(60, 63, 65));
-        tools.setForeground(Color.BLACK);
+        tools.setForeground(Color.WHITE);
         gui.add(tools, BorderLayout.PAGE_START);
-        Action newGameAction = new AbstractAction("New") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setupNewGame();
-            }
-        };
-        JButton newGameButton = new JButton(newGameAction);
-        newGameButton.setBackground(Color.WHITE);
-        newGameButton.setForeground(Color.BLACK);
-        tools.add(newGameButton);
 
-        Action toggleThemeAction = new AbstractAction("Theme") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                toggleTheme();
-            }
-        };
-        JButton toggleThemeButton = new JButton(toggleThemeAction);
-        toggleThemeButton.setBackground(new Color(60, 63, 65));
-        toggleThemeButton.setForeground(Color.BLACK);
-        tools.add(toggleThemeButton);
+        newButton = createStyledButton("New", e -> setupNewGame());
+        themeButton = createStyledButton("Theme", e -> toggleTheme());
 
+        tools.add(newButton);
+        tools.add(themeButton);
+        
         tools.addSeparator();
-        message.setForeground(Color.WHITE);
+        message.setForeground(Color.BLACK);
         tools.add(message);
 
         chessBoard = new JPanel(new GridLayout(0, 9)) {
@@ -87,7 +74,6 @@ public class ChessGUI {
                 }
                 int w = (int) prefSize.getWidth();
                 int h = (int) prefSize.getHeight();
-                // the smaller of the two sizes
                 int s = Math.min(w, h);
                 return new Dimension(s, s);
             }
@@ -105,6 +91,8 @@ public class ChessGUI {
                 JButton b = new JButton();
                 b.setMargin(buttonMargin);
                 b.setFocusPainted(false);
+                b.setOpaque(true);
+                b.setBorderPainted(false);
                 ImageIcon icon = new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
                 b.setIcon(icon);
                 if ((jj % 2 == 1 && ii % 2 == 1) || (jj % 2 == 0 && ii % 2 == 0)) {
@@ -112,13 +100,13 @@ public class ChessGUI {
                 } else {
                     b.setBackground(new Color(58, 95, 170));
                 }
-                final int x = ii; // create a final copy of ii
-                final int y = jj; // create a final copy of jj
+                final int x = ii;
+                final int y = jj;
 
                 b.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        buttonClicked(b, x, y); // use the final variables
+                        buttonClicked(b, x, y);
                     }
                 });
                 chessBoardSquares[jj][ii] = b;
@@ -145,24 +133,33 @@ public class ChessGUI {
         }
     }
 
+    private JButton createStyledButton(String text, ActionListener actionListener) {
+        JButton button = new JButton(text);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setOpaque(true);
+        button.setFont(new Font("Arial", Font.PLAIN, 14));
+        button.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
+        button.addActionListener(actionListener);
+        return button;
+    }
+
     private void buttonClicked(JButton b, int row, int col) {
         if (selectedButton == null) {
-            // No piece selected yet, select this piece
-            if (chess.getChessBoard()[row][col]  != null) {
+            if (chess.getChessBoard()[row][col] != null) {
                 selectedButton = b;
                 selectedRow = row;
                 selectedCol = col;
             }
         } else if (chess.validate(selectedRow, selectedCol, row, col, chess.getChessBoard(), turn)) {
-            // Move the piece to the new position
-            System.out.println(selectedRow + "/" + selectedCol + " to " + row + "/" + col);
             chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
             selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
-            int promote = (chess.promote(row, col, chess.getChessBoard()));
-            if (promote == 1)
+            int promote = chess.promote(row, col, chess.getChessBoard());
+            if (promote == 1) {
                 chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[WHITE][KING]));
-            if (promote == 2)
+            } else if (promote == 2) {
                 chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[BLACK][KING]));
+            }
             selectedButton = null;
             selectedRow = -1;
             selectedCol = -1;
@@ -178,9 +175,8 @@ public class ChessGUI {
         return gui;
     }
 
-    private final void createImages() {
+    private void createImages() {
         try {
-            // Use a file object to read the image from the local file system
             File file = new File("main/img/pieces.png");
             BufferedImage bi = ImageIO.read(file);
             for (int ii = 0; ii < 2; ii++) {
@@ -194,17 +190,15 @@ public class ChessGUI {
         }
     }
 
-    private final void setupNewGame() {
+    private void setupNewGame() {
         message.setText("Make your move!");
 
-        // Reset the board pieces to their initial positions
         for (int ii = 0; ii < 8; ii++) {
             for (int jj = 0; jj < 8; jj++) {
-                chessBoardSquares[ii][jj].setIcon(null);  // Clear all icons
+                chessBoardSquares[ii][jj].setIcon(null);
             }
         }
 
-        // Set up black pieces
         for (int ii = 0; ii < STARTING_ROW.length; ii++) {
             chessBoardSquares[ii][0].setIcon(new ImageIcon(chessPieceImages[BLACK][STARTING_ROW[ii]]));
         }
@@ -212,7 +206,6 @@ public class ChessGUI {
             chessBoardSquares[ii][1].setIcon(new ImageIcon(chessPieceImages[BLACK][PAWN]));
         }
 
-        // Set up white pieces
         for (int ii = 0; ii < STARTING_ROW.length; ii++) {
             chessBoardSquares[ii][6].setIcon(new ImageIcon(chessPieceImages[WHITE][PAWN]));
         }
@@ -220,83 +213,75 @@ public class ChessGUI {
             chessBoardSquares[ii][7].setIcon(new ImageIcon(chessPieceImages[WHITE][STARTING_ROW[ii]]));
         }
 
-        // Reset turn and selected piece variables
         turn = true;
         selectedButton = null;
         selectedRow = -1;
         selectedCol = -1;
 
-        // Reset the board in the model
         chess = new Board();
     }
 
     private void toggleTheme() {
+        Color bgColor, darkSquareColor, lightSquareColor, toolbarColor, textColor, buttonBgColor, buttonFgColor;
+
         if (isDarkMode) {
-            // Switch to light mode
-            gui.setBackground(new Color(245, 245, 245));
-            chessBoard.setBackground(new Color(245, 245, 245));
-            for (int ii = 0; ii < chessBoardSquares.length; ii++) {
-                for (int jj = 0; jj < chessBoardSquares[ii].length; jj++) {
-                    if ((jj % 2 == 1 && ii % 2 == 1) || (jj % 2 == 0 && ii % 2 == 0)) {
-                        chessBoardSquares[jj][ii].setBackground(new Color(255, 255, 255)); // White
-                    } else {
-                        chessBoardSquares[jj][ii].setBackground(new Color(192, 192, 192)); // Gray
-                    }
-                }
-            }
-            for (Component c : chessBoard.getComponents()) {
-                if (c instanceof JLabel) {
-                    c.setForeground(Color.BLACK);
-                }
-            }
-            for (Component c : gui.getComponents()) {
-                if (c instanceof JToolBar) {
-                    JToolBar toolbar = (JToolBar) c;
-                    toolbar.setBackground(new Color(225, 225, 225));
-                    for (Component btn : toolbar.getComponents()) {
-                        if (btn instanceof JButton) {
-                            btn.setBackground(new Color(225, 225, 225));
-                            btn.setForeground(Color.BLACK);
-                        }
-                    }
-                }
-            }
-            message.setForeground(Color.BLACK);
+            bgColor = new Color(245, 245, 245);
+            darkSquareColor = new Color(192, 192, 192);
+            lightSquareColor = new Color(255, 255, 255);
+            toolbarColor = new Color(225, 225, 225);
+            textColor = Color.BLACK;
+            buttonBgColor = new Color(225, 225, 225);
+            buttonFgColor = Color.BLACK;
         } else {
-            // Switch to dark mode
-            gui.setBackground(new Color(43, 43, 43));
-            chessBoard.setBackground(new Color(43, 43, 43));
-            for (int ii = 0; ii < chessBoardSquares.length; ii++) {
-                for (int jj = 0; jj < chessBoardSquares[ii].length; jj++) {
-                    if ((jj % 2 == 1 && ii % 2 == 1) || (jj % 2 == 0 && ii % 2 == 0)) {
-                        chessBoardSquares[jj][ii].setBackground(new Color(64, 64, 64)); // Dark gray
-                    } else {
-                        chessBoardSquares[jj][ii].setBackground(new Color(32, 32, 32)); // Black
-                    }
-                }
-            }
-            for (Component c : chessBoard.getComponents()) {
-                if (c instanceof JLabel) {
-                    c.setForeground(Color.WHITE);
-                }
-            }
-            for (Component c : gui.getComponents()) {
-                if (c instanceof JToolBar) {
-                    JToolBar toolbar = (JToolBar) c;
-                    toolbar.setBackground(new Color(60, 63, 65));
-                    for (Component btn : toolbar.getComponents()) {
-                        if (btn instanceof JButton) {
-                            btn.setBackground(Color.WHITE);
-                            btn.setForeground(Color.BLACK);
-                        }
-                    }
-                }
-            }
-            message.setForeground(Color.WHITE);
+            bgColor = new Color(43, 43, 43);
+            darkSquareColor = new Color(64, 64, 64);
+            lightSquareColor = new Color(32, 32, 32);
+            toolbarColor = new Color(60, 63, 65);
+            textColor = Color.WHITE;
+            buttonBgColor = new Color(60, 63, 65);
+            buttonFgColor = Color.WHITE;
         }
+
+        gui.setBackground(bgColor);
+        chessBoard.setBackground(bgColor);
+
+        for (int ii = 0; ii < chessBoardSquares.length; ii++) {
+            for (int jj = 0; jj < chessBoardSquares[ii].length; jj++) {
+                if ((jj % 2 == 1 && ii % 2 == 1) || (jj % 2 == 0 && ii % 2 == 0)) {
+                    chessBoardSquares[jj][ii].setBackground(darkSquareColor);
+                } else {
+                    chessBoardSquares[jj][ii].setBackground(lightSquareColor);
+                }
+            }
+        }
+
+        for (Component c : chessBoard.getComponents()) {
+            if (c instanceof JLabel) {
+                c.setForeground(textColor);
+            }
+        }
+
+        for (Component c : gui.getComponents()) {
+            if (c instanceof JToolBar) {
+                JToolBar toolbar = (JToolBar) c;
+                toolbar.setBackground(toolbarColor);
+                for (Component btn : toolbar.getComponents()) {
+                    if (btn instanceof JButton) {
+                        btn.setBackground(buttonBgColor);
+                        btn.setForeground(buttonFgColor);
+                    }
+                }
+            }
+        }
+
+        newButton.setBackground(buttonBgColor);
+        newButton.setForeground(buttonFgColor);
+        themeButton.setBackground(buttonBgColor);
+        themeButton.setForeground(buttonFgColor);
+
+        message.setForeground(textColor);
         isDarkMode = !isDarkMode;
-    }      
-    
+    }
 
     public static void main(String[] args) {
         Runnable r = new Runnable() {
