@@ -25,14 +25,10 @@ QuantaChess is a simple chess game implemented in Java with a graphical user int
   
 ## Preview
 
-## Preview
-
 <div style="display: flex; justify-content: center;">
   <img src="assets/chesswhite.png" alt="Screenshot 1" width="400"/>
   <img src="assets/chessblack.png" alt="Screenshot 2" width="400"/>
 </div>
-
-
 
 ## Controls
 
@@ -46,5 +42,5 @@ QuantaChess is a simple chess game implemented in Java with a graphical user int
 
 ## Contributors
 
-- [Your Name](link_to_your_profile) - Developer
+- [techmengg]([link_to_your_profile](https://github.com/techmengg)) - Developer
 
