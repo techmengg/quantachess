@@ -21,8 +21,17 @@ public class ChessGUI {
     private static final int BLACK = 0, WHITE = 1;
     private static Board chess = new Board();
     private static boolean turn = true;
+    private final JLabel whiteTimerLabel = new JLabel("05:00", SwingConstants.CENTER); // Timer labels
+    private final JLabel blackTimerLabel = new JLabel("05:00", SwingConstants.CENTER);
 
-    private boolean isDarkMode = true; // This should set default theme color to white
+    private Timer whiteTimer;
+    private Timer blackTimer;
+    
+
+    private int whiteTimeRemaining = 300; // 5 minutes in seconds
+    private int blackTimeRemaining = 300; // 5 minutes in seconds
+
+    private boolean isDarkMode = true; // Default theme color to dark
     private JButton selectedButton = null;  // To keep track of the selected piece
     private int selectedRow = -1;  // Row of the selected piece
     private int selectedCol = -1;  // Column of the selected piece
@@ -33,12 +42,13 @@ public class ChessGUI {
     ChessGUI() {
         initializeGui();
         toggleTheme(); // Set dark theme as default
+        whiteTimer.stop(); // Stop the timers initially
+        blackTimer.stop();
     }
 
     public final void initializeGui() {
         // Create the images for the chess pieces
         createImages();
-
         // Set up the main GUI
         gui.setBorder(new EmptyBorder(5, 5, 5, 5));
         gui.setBackground(new Color(43, 43, 43));
@@ -48,17 +58,52 @@ public class ChessGUI {
         tools.setBackground(new Color(60, 63, 65));
         tools.setForeground(Color.WHITE);
         gui.add(tools, BorderLayout.PAGE_START);
-
+    
         newButton = createStyledButton("New", e -> setupNewGame());
         themeButton = createStyledButton("Theme", e -> toggleTheme());
-
+    
         tools.add(newButton);
         tools.add(themeButton);
         
         tools.addSeparator();
-        message.setForeground(Color.BLACK);
+        message.setForeground(Color.WHITE);
         tools.add(message);
-
+    
+        // Set up the timer labels
+        JPanel timerPanel = new JPanel(new GridLayout(1, 2));
+        timerPanel.setBackground(new Color(60, 63, 65));
+        timerPanel.add(whiteTimerLabel);
+        timerPanel.add(blackTimerLabel);
+        tools.add(timerPanel);
+    
+        // Initialize timers
+        whiteTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                whiteTimeRemaining--;
+                updateTimerLabel(whiteTimerLabel, whiteTimeRemaining);
+                if (whiteTimeRemaining == 0) {
+                    whiteTimer.stop();
+                    JOptionPane.showMessageDialog(gui, "Black wins by timeout!");
+                }
+            }
+        });
+    
+        blackTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                blackTimeRemaining--;
+                updateTimerLabel(blackTimerLabel, blackTimeRemaining);
+                if (blackTimeRemaining == 0) {
+                    blackTimer.stop();
+                    JOptionPane.showMessageDialog(gui, "White wins by timeout!");
+                }
+            }
+        });
+        
+        // Start the white timer at the beginning
+        whiteTimer.start();
+    
         chessBoard = new JPanel(new GridLayout(0, 9)) {
             @Override
             public final Dimension getPreferredSize() {
@@ -84,7 +129,7 @@ public class ChessGUI {
         boardConstrain.setBackground(new Color(43, 43, 43));
         boardConstrain.add(chessBoard);
         gui.add(boardConstrain);
-
+    
         Insets buttonMargin = new Insets(0, 0, 0, 0);
         for (int ii = 0; ii < chessBoardSquares.length; ii++) {
             for (int jj = 0; jj < chessBoardSquares[ii].length; jj++) {
@@ -102,7 +147,7 @@ public class ChessGUI {
                 }
                 final int x = ii;
                 final int y = jj;
-
+    
                 b.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -112,11 +157,12 @@ public class ChessGUI {
                 chessBoardSquares[jj][ii] = b;
             }
         }
-
+    
         chessBoard.add(new JLabel(""));
         for (int ii = 0; ii < 8; ii++) {
             JLabel label = new JLabel(COLS.substring(ii, ii + 1), SwingConstants.CENTER);
             label.setForeground(Color.WHITE);
+            label.setFont(new Font("Arial", Font.BOLD, 14));
             chessBoard.add(label);
         }
         for (int ii = 0; ii < 8; ii++) {
@@ -125,6 +171,7 @@ public class ChessGUI {
                     case 0:
                         JLabel rowLabel = new JLabel("" + (9 - (ii + 1)), SwingConstants.CENTER);
                         rowLabel.setForeground(Color.WHITE);
+                        rowLabel.setFont(new Font("Arial", Font.BOLD, 14));
                         chessBoard.add(rowLabel);
                     default:
                         chessBoard.add(chessBoardSquares[jj][ii]);
@@ -133,13 +180,19 @@ public class ChessGUI {
         }
     }
 
+    private void updateTimerLabel(JLabel label, int timeRemaining) {
+        int minutes = timeRemaining / 60;
+        int seconds = timeRemaining % 60;
+        label.setText(String.format("%02d:%02d", minutes, seconds));
+    }
+
     private JButton createStyledButton(String text, ActionListener actionListener) {
         JButton button = new JButton(text);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(60, 63, 65));
         button.setOpaque(true);
-        button.setFont(new Font("Arial", Font.PLAIN, 14));
-        button.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
+        button.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         button.addActionListener(actionListener);
         return button;
     }
@@ -156,21 +209,43 @@ public class ChessGUI {
             selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
             int promote = chess.promote(row, col, chess.getChessBoard());
             if (promote == 1) {
-                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[WHITE][KING]));
+                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[turn ? WHITE : BLACK][QUEEN]));
             } else if (promote == 2) {
-                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[BLACK][KING]));
+                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[turn ? WHITE : BLACK][QUEEN]));
+            } else if (promote == 3) {
+                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[turn ? WHITE : BLACK][ROOK]));
+            } else if (promote == 4) {
+                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[turn ? WHITE : BLACK][BISHOP]));
+            } else if (promote == 5) {
+                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[turn ? WHITE : BLACK][KNIGHT]));
             }
             selectedButton = null;
             selectedRow = -1;
             selectedCol = -1;
+    
+            // Switch timers
+            if (turn) {
+                whiteTimer.stop();
+                blackTimer.start();
+            } else {
+                blackTimer.stop();
+                whiteTimer.start();
+            }
+    
             turn = !turn;
         } else {
             selectedButton = null;
             selectedRow = -1;
             selectedCol = -1;
         }
+    
+        // Start the timers only if the "New" button is clicked
+        if (b == newButton) {
+            whiteTimer.start();
+            blackTimer.stop(); // Stop black timer at the beginning
+        }
     }
-
+    
     public final JComponent getGui() {
         return gui;
     }
@@ -190,40 +265,54 @@ public class ChessGUI {
         }
     }
 
-    private void setupNewGame() {
+    private final void setupNewGame() {
         message.setText("Make your move!");
-
+    
+        // Reset the board pieces to their initial positions
         for (int ii = 0; ii < 8; ii++) {
             for (int jj = 0; jj < 8; jj++) {
-                chessBoardSquares[ii][jj].setIcon(null);
+                chessBoardSquares[ii][jj].setIcon(null);  // Clear all icons
             }
         }
-
+    
+        // Set up black pieces
         for (int ii = 0; ii < STARTING_ROW.length; ii++) {
             chessBoardSquares[ii][0].setIcon(new ImageIcon(chessPieceImages[BLACK][STARTING_ROW[ii]]));
         }
         for (int ii = 0; ii < STARTING_ROW.length; ii++) {
             chessBoardSquares[ii][1].setIcon(new ImageIcon(chessPieceImages[BLACK][PAWN]));
         }
-
+    
+        // Set up white pieces
         for (int ii = 0; ii < STARTING_ROW.length; ii++) {
             chessBoardSquares[ii][6].setIcon(new ImageIcon(chessPieceImages[WHITE][PAWN]));
         }
         for (int ii = 0; ii < STARTING_ROW.length; ii++) {
             chessBoardSquares[ii][7].setIcon(new ImageIcon(chessPieceImages[WHITE][STARTING_ROW[ii]]));
         }
-
+    
+        // Reset turn and selected piece variables
         turn = true;
         selectedButton = null;
         selectedRow = -1;
         selectedCol = -1;
-
+    
+        // Reset the board in the model
         chess = new Board();
+    
+        // Reset timers
+        whiteTimer.stop();
+        blackTimer.stop();
+        whiteTimeRemaining = 300;
+        blackTimeRemaining = 300;
+        updateTimerLabel(whiteTimerLabel, whiteTimeRemaining);
+        updateTimerLabel(blackTimerLabel, blackTimeRemaining);
+        whiteTimer.start();
     }
 
     private void toggleTheme() {
-        Color bgColor, darkSquareColor, lightSquareColor, toolbarColor, textColor, buttonBgColor, buttonFgColor;
-
+        Color bgColor, darkSquareColor, lightSquareColor, toolbarColor, textColor, buttonBgColor, buttonFgColor, timerBgColor, timerColor;
+    
         if (isDarkMode) {
             bgColor = new Color(245, 245, 245);
             darkSquareColor = new Color(192, 192, 192);
@@ -232,6 +321,8 @@ public class ChessGUI {
             textColor = Color.BLACK;
             buttonBgColor = new Color(225, 225, 225);
             buttonFgColor = Color.BLACK;
+            timerBgColor = new Color(225, 225, 225); // Darker background for dark mode
+            timerColor = new Color(43, 43, 43); // Darker text color for light mode
         } else {
             bgColor = new Color(43, 43, 43);
             darkSquareColor = new Color(64, 64, 64);
@@ -240,11 +331,13 @@ public class ChessGUI {
             textColor = Color.WHITE;
             buttonBgColor = new Color(60, 63, 65);
             buttonFgColor = Color.WHITE;
-        }
-
+            timerBgColor = new Color(60, 63, 65); // Dark background for dark mode
+            timerColor = new Color(245, 245, 245); // Lighter text color for dark mode
+        }        
+    
         gui.setBackground(bgColor);
         chessBoard.setBackground(bgColor);
-
+    
         for (int ii = 0; ii < chessBoardSquares.length; ii++) {
             for (int jj = 0; jj < chessBoardSquares[ii].length; jj++) {
                 if ((jj % 2 == 1 && ii % 2 == 1) || (jj % 2 == 0 && ii % 2 == 0)) {
@@ -254,13 +347,13 @@ public class ChessGUI {
                 }
             }
         }
-
+    
         for (Component c : chessBoard.getComponents()) {
             if (c instanceof JLabel) {
                 c.setForeground(textColor);
             }
         }
-
+    
         for (Component c : gui.getComponents()) {
             if (c instanceof JToolBar) {
                 JToolBar toolbar = (JToolBar) c;
@@ -273,12 +366,20 @@ public class ChessGUI {
                 }
             }
         }
-
+    
         newButton.setBackground(buttonBgColor);
         newButton.setForeground(buttonFgColor);
         themeButton.setBackground(buttonBgColor);
         themeButton.setForeground(buttonFgColor);
-
+    
+        whiteTimerLabel.setOpaque(true); // Ensure opacity is set to true
+        blackTimerLabel.setOpaque(true); // Ensure opacity is set to true
+    
+        whiteTimerLabel.setBackground(timerBgColor); // Adjust timer background color
+        whiteTimerLabel.setForeground(timerColor); // Adjust timer text color
+        blackTimerLabel.setBackground(timerBgColor); // Adjust timer background color
+        blackTimerLabel.setForeground(timerColor); // Adjust timer text color
+    
         message.setForeground(textColor);
         isDarkMode = !isDarkMode;
     }
