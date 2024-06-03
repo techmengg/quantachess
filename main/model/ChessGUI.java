@@ -199,25 +199,22 @@ public class ChessGUI {
 
     private void buttonClicked(JButton b, int row, int col) {
         if (selectedButton == null) {
+            // No piece selected yet, select this piece
             if (chess.getChessBoard()[row][col] != null) {
                 selectedButton = b;
                 selectedRow = row;
                 selectedCol = col;
             }
         } else if (chess.validate(selectedRow, selectedCol, row, col, chess.getChessBoard(), turn)) {
+            // Move the piece to the new position
+            System.out.println(selectedRow + "/" + selectedCol + " to " + row + "/" + col);
             chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
             selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
             int promote = chess.promote(row, col, chess.getChessBoard());
             if (promote == 1) {
-                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[turn ? WHITE : BLACK][QUEEN]));
+                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[WHITE][KING]));
             } else if (promote == 2) {
-                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[turn ? WHITE : BLACK][QUEEN]));
-            } else if (promote == 3) {
-                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[turn ? WHITE : BLACK][ROOK]));
-            } else if (promote == 4) {
-                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[turn ? WHITE : BLACK][BISHOP]));
-            } else if (promote == 5) {
-                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[turn ? WHITE : BLACK][KNIGHT]));
+                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[BLACK][KING]));
             }
             selectedButton = null;
             selectedRow = -1;
@@ -244,7 +241,7 @@ public class ChessGUI {
             whiteTimer.start();
             blackTimer.stop(); // Stop black timer at the beginning
         }
-    }
+    }    
     
     public final JComponent getGui() {
         return gui;
