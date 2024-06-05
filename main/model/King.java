@@ -30,7 +30,7 @@ public class King extends Piece {
         // The king can move one square in any direction
         int deltaRow = Math.abs(r1 - r2);
         int deltaCol = Math.abs(c1 - c2);
-
+        hasMoved = true;        
         return deltaRow <= 1 && deltaCol <= 1;
     }
 }

@@ -28,7 +28,9 @@ public class Piece
     public boolean canMove(int r1, int c1, int r2, int c2, Piece[][] chessboard)
     {
         return false;
-    }
+    } 
+
+    
 
     
 }

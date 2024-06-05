@@ -181,8 +181,44 @@ public class ChessGUI {
 
             
         }
-        else if(chess.getPiece(0,0).castle(selectedRow, selectedCol, row, col,chess.getChessBoard())) //castling methods 
+        else if(Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(),turn)>0) //castling methods 
         {
+            int type = Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(),turn); 
+            int pcol=1; //piece colour 
+            if(!turn) 
+            {
+                pcol=0;
+            }
+            if(type == 1)
+            {  
+                //code for peice movment need to fix k and Y first 
+                /*System.out.println("0-0");//chess notation for kingside castle 
+                System.out.println(pcol);//feel free to delete  
+                System.out.println("SC: "+selectedCol); 
+                System.out.println("SR: "+selectedRow);  
+                System.out.println("C: "+col); 
+                System.out.println("R: "+row); 
+                */
+                chess.movePiece(selectedRow, selectedCol,row, 5); 
+                chess.movePiece(row,col,row, 6);  
+                chessBoardSquares[selectedRow][selectedCol].setIcon(null); //removes the rook icon from the board  
+                chessBoardSquares[5][selectedRow].setIcon(new ImageIcon(chessPieceImages[pcol][ROOK]));  
+                System.out.println("Pc:"+pcol);
+                chessBoardSquares[col][row].setIcon(null); // removes the king image from it's position
+                chessBoardSquares[6][row].setIcon(new ImageIcon(chessPieceImages[pcol][QUEEN]));  
+                  
+            }   
+            if(type == 2) 
+            { 
+                System.out.println("0-0-0");    //chess notation for kingside castle
+               // chess.movePiece(selectedRow, selectedCol,3, col);  
+               // chess.movePiece(row, col,2, col);  
+            } 
+            
+            selectedButton = null;
+            selectedRow = -1;
+            selectedCol = -1; 
+            turn = !turn;  
             
         }else {
             selectedButton = null;
@@ -318,7 +354,9 @@ public class ChessGUI {
     public static void main(String[] args) {
         Runnable r = new Runnable() {
             @Override
-            public void run() {
+            public void run() { 
+                
+
                 ChessGUI cg = new ChessGUI();
                 JFrame f = new JFrame("ByteBoard");  
                 Image icon = Toolkit.getDefaultToolkit().getImage("main\\img\\chess.png"); 
