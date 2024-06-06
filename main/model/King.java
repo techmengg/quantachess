@@ -22,5 +22,9 @@ public class King extends Piece {
         int deltaCol = Math.abs(c1 - c2);
 
         return deltaRow <= 1 && deltaCol <= 1;
+
+        // Swap place with the rook (Castling)
+        
+
     }
 }
