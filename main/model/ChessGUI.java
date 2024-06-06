@@ -143,7 +143,8 @@ public class ChessGUI {
         }
     }
 
-    private void buttonClicked(JButton b, int row, int col) {
+    private void buttonClicked(JButton b, int row, int col) { 
+        
         if (selectedButton == null) {
             // No piece selected yet, select this piece
             if (chess.getChessBoard()[row][col]  != null) {
@@ -183,9 +184,9 @@ public class ChessGUI {
         }
         else if(Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(),turn)>0) //castling methods 
         {
-            int type = Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(),turn); 
-            int pcol=1; //piece colour 
-            if(!turn) 
+            int type = Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(), turn); 
+            int pcol = 1; 
+            if(!turn) //seems unneccessairy but boolean cant be an int so medium required.
             {
                 pcol=0;
             }

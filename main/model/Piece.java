@@ -7,7 +7,8 @@ public class Piece
 
     public Piece() 
     {
-        color = true;
+        color = true; 
+        hasMoved =false; 
     }
 
     public Piece(boolean color)
