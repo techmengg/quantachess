@@ -210,12 +210,14 @@ public class ChessGUI {
             System.out.println(selectedRow + "/" + selectedCol + " to " + row + "/" + col);
             chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
             selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+
             int promote = chess.promote(row, col, chess.getChessBoard());
             if (promote == 1) {
                 chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[WHITE][KING]));
             } else if (promote == 2) {
                 chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[BLACK][KING]));
             }
+
             selectedButton = null;
             selectedRow = -1;
             selectedCol = -1;
