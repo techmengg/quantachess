@@ -24,7 +24,6 @@ public class King extends Piece {
         return deltaRow <= 1 && deltaCol <= 1;
 
         // Swap place with the rook (Castling)
-        
-
     }
+
 }
