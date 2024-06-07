@@ -42,7 +42,7 @@ public class Rook extends Piece
                         while(i>=1)
                         {  
                             System.out.println("i:"+i+" r1:"+r1);
-                            if(chessboard[i][r1]!=null)
+                            if(chessboard[r1][i]!=null)
                             {
                                 System.out.println("False");
                                 return 0; 
@@ -54,18 +54,18 @@ public class Rook extends Piece
                          
                          
                     } 
-                    else // logic for kingside castling
+                    else if(space== 3)// logic for kingside castling
                     { 
-                        int  i= c1 +1; 
-                        while(i<=6)
+                        int  i= c1 -1; 
+                        while(i>=5)
                         { 
                             System.out.println("i:"+i+" r1:"+r1);
-                            if(chessboard[i][r1]!=null)
+                            if(chessboard[r1][i]!=null)
                             { 
                                 System.out.println("False");
                                 return 0; 
                             }
-                            i++; 
+                            i--; 
 
                         } 
                         return 1; 
@@ -83,7 +83,12 @@ public class Rook extends Piece
     public boolean canMove(int r1, int c1, int r2, int c2, Piece[][] chessboard) 
     {   
 
-        //add a condition like if the peices are the same colour and if first peice is rook and second is king
-        return true;
+        //add a condition like if the peices are the same colour and if first peice is rook and second is king 
+        if(chessboard[r1][c1].getColor()==chessboard[r2][c2].getColor())
+        {
+            return false;
+        }
+        return true;  
+
     }
 }
