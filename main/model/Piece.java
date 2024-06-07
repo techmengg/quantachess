@@ -3,18 +3,24 @@ package main.model;
 public class Piece 
 {
     private boolean color; 
-    private boolean hasMoved; 
+    private boolean hasMoved;  
+   
 
     public Piece() 
     {
         color = true; 
-        hasMoved =false; 
+        hasMoved =false;  
+        
     }
 
     public Piece(boolean color)
     {
         this.color = color; // true : white and false : black
     }
+
+    
+
+    
 
     public boolean getColor()
     {

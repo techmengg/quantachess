@@ -3,18 +3,18 @@ package main.model;
 public class King extends Piece { 
 
     public static boolean hasMoved; //required for castling logic 
-
     public King(boolean color) { 
         super(color); 
-        hasMoved = false;
+        hasMoved = false; 
     } 
 
     public boolean gethasMoved()
     {
 
         return hasMoved;
-    }
+    } 
 
+    
     @Override
     public boolean canMove(int r1, int c1, int r2, int c2, Piece[][] chessboard) {
         if (r1 == r2 && c1 == c2) {

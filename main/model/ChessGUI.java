@@ -171,9 +171,9 @@ public class ChessGUI {
              
             
             
-            {
+            
 
-            }
+            
               
             selectedButton = null;
             selectedRow = -1;
@@ -191,18 +191,12 @@ public class ChessGUI {
                 pcol=0;
             }
             if(type == 1)
-            {  
-                //code for peice movment need to fix k and Y first 
-                /*System.out.println("0-0");//chess notation for kingside castle 
-                System.out.println(pcol);//feel free to delete  
-                System.out.println("SC: "+selectedCol); 
-                System.out.println("SR: "+selectedRow);  
-                System.out.println("C: "+col); 
-                System.out.println("R: "+row); 
-                */
+            {   
+                System.out.println("0-0");//chess notation for kingside castle 
                 chess.movePiece(selectedRow, selectedCol,row, 5); 
                 chess.movePiece(row,col,row, 6);  
-                chessBoardSquares[selectedRow][selectedCol].setIcon(null); //removes the rook icon from the board  
+                chessBoardSquares[selectedCol][selectedRow].setIcon(null); //removes the rook icon from the board  
+                System.out.println("r: "+selectedRow+"C:"+selectedCol);
                 chessBoardSquares[5][selectedRow].setIcon(new ImageIcon(chessPieceImages[pcol][ROOK]));  
                 System.out.println("Pc:"+pcol);
                 chessBoardSquares[col][row].setIcon(null); // removes the king image from it's position
@@ -212,8 +206,15 @@ public class ChessGUI {
             if(type == 2) 
             { 
                 System.out.println("0-0-0");    //chess notation for kingside castle
-               // chess.movePiece(selectedRow, selectedCol,3, col);  
-               // chess.movePiece(row, col,2, col);  
+                //movements on board for rook 
+                chess.movePiece(selectedRow, selectedCol,row, 3);  
+                 // movements on board for king
+                chess.movePiece(row,col,row, 2); 
+               
+                chessBoardSquares[selectedCol][selectedRow].setIcon(null); 
+                chessBoardSquares[3][selectedRow].setIcon(new ImageIcon(chessPieceImages[pcol][ROOK])); 
+                chessBoardSquares[col][row].setIcon(null); 
+                chessBoardSquares[2][row].setIcon(new ImageIcon(chessPieceImages[pcol][QUEEN]));  
             } 
             
             selectedButton = null;
