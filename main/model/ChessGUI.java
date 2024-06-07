@@ -196,9 +196,7 @@ public class ChessGUI {
                 chess.movePiece(selectedRow, selectedCol,row, 5); 
                 chess.movePiece(row,col,row, 6);  
                 chessBoardSquares[selectedCol][selectedRow].setIcon(null); //removes the rook icon from the board  
-                System.out.println("r: "+selectedRow+"C:"+selectedCol);
                 chessBoardSquares[5][selectedRow].setIcon(new ImageIcon(chessPieceImages[pcol][ROOK]));  
-                System.out.println("Pc:"+pcol);
                 chessBoardSquares[col][row].setIcon(null); // removes the king image from it's position
                 chessBoardSquares[6][row].setIcon(new ImageIcon(chessPieceImages[pcol][QUEEN]));  
                   
