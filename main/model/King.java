@@ -1,20 +1,10 @@
 package main.model;
 
-public class King extends Piece { 
+public class King extends Piece {
+    public King(boolean color) {
+        super(color);
+    }
 
-    public static boolean hasMoved; //required for castling logic 
-    public King(boolean color) { 
-        super(color); 
-        hasMoved = false; 
-    } 
-
-    public boolean gethasMoved()
-    {
-
-        return hasMoved;
-    } 
-
-    
     @Override
     public boolean canMove(int r1, int c1, int r2, int c2, Piece[][] chessboard) {
         if (r1 == r2 && c1 == c2) {
@@ -30,7 +20,7 @@ public class King extends Piece {
         // The king can move one square in any direction
         int deltaRow = Math.abs(r1 - r2);
         int deltaCol = Math.abs(c1 - c2);
-        hasMoved = true;        
+
         return deltaRow <= 1 && deltaCol <= 1;
 
         // Swap place with the rook (Castling)
