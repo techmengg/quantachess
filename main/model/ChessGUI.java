@@ -180,6 +180,10 @@ public class ChessGUI {
         }
     }
 
+
+    private void buttonClicked(JButton b, int row, int col) { 
+        
+
     private void updateTimerLabel(JLabel label, int timeRemaining) {
         int minutes = timeRemaining / 60;
         int seconds = timeRemaining % 60;
@@ -198,6 +202,7 @@ public class ChessGUI {
     }
 
     private void buttonClicked(JButton b, int row, int col) {
+
         if (selectedButton == null) {
             // No piece selected yet, select this piece
             if (chess.getChessBoard()[row][col] != null) {
@@ -210,6 +215,72 @@ public class ChessGUI {
             System.out.println(selectedRow + "/" + selectedCol + " to " + row + "/" + col);
             chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
             selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+
+            int promote = (chess.promote(row, col, chess.getChessBoard()));
+            if (promote == 1) 
+            {
+                 chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[WHITE][KING]));
+            }
+            
+            if (promote == 2)  
+            {
+                  chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[BLACK][KING]));
+            } 
+
+             
+            
+            
+            
+
+            
+              
+            selectedButton = null;
+            selectedRow = -1;
+            selectedCol = -1;
+            turn = !turn; 
+
+            
+        }
+        else if(Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(),turn)>0) //castling methods 
+        {
+            int type = Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(), turn); 
+            int pcol = 1; 
+            if(!turn) //seems unneccessairy but boolean cant be an int so medium required.
+            {
+                pcol=0;
+            }
+            if(type == 1)
+            {   
+                System.out.println("0-0");//chess notation for kingside castle 
+                chess.movePiece(selectedRow, selectedCol,row, 5); 
+                chess.movePiece(row,col,row, 6);  
+                chessBoardSquares[selectedCol][selectedRow].setIcon(null); //removes the rook icon from the board  
+                chessBoardSquares[5][selectedRow].setIcon(new ImageIcon(chessPieceImages[pcol][ROOK]));  
+                chessBoardSquares[col][row].setIcon(null); // removes the king image from it's position
+                chessBoardSquares[6][row].setIcon(new ImageIcon(chessPieceImages[pcol][QUEEN]));  
+                  
+            }   
+            if(type == 2) 
+            { 
+                System.out.println("0-0-0");    //chess notation for kingside castle
+                //movements on board for rook 
+                chess.movePiece(selectedRow, selectedCol,row, 3);  
+                 // movements on board for king
+                chess.movePiece(row,col,row, 2); 
+               
+                chessBoardSquares[selectedCol][selectedRow].setIcon(null); 
+                chessBoardSquares[3][selectedRow].setIcon(new ImageIcon(chessPieceImages[pcol][ROOK])); 
+                chessBoardSquares[col][row].setIcon(null); 
+                chessBoardSquares[2][row].setIcon(new ImageIcon(chessPieceImages[pcol][QUEEN]));  
+            } 
+            
+            selectedButton = null;
+            selectedRow = -1;
+            selectedCol = -1; 
+            turn = !turn;  
+            
+        }else {
+
 
             int promote = chess.promote(row, col, chess.getChessBoard());
             if (promote == 1) {
@@ -233,6 +304,7 @@ public class ChessGUI {
     
             turn = !turn;
         } else {
+
             selectedButton = null;
             selectedRow = -1;
             selectedCol = -1;
@@ -386,9 +458,14 @@ public class ChessGUI {
     public static void main(String[] args) {
         Runnable r = new Runnable() {
             @Override
-            public void run() {
+            public void run() { 
+                
+
                 ChessGUI cg = new ChessGUI();
+
+
                 JFrame f = new JFrame("QuantaChess");
+
                 f.add(cg.getGui());
                 f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 f.setLocationByPlatform(true);
