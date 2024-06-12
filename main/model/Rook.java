@@ -33,10 +33,6 @@ public class Rook extends Piece
                 if(chessboard[r1][c1].getColor()==chessboard[r2][c2].getColor() && turn==chessboard[r1][c1].getColor()) 
                 {
                  int space = Math.abs(c2-c1);     
-                 //System.out.println(c1);  
-                 //System.out.println(c2);
-                 //System.out.println(space);  
-                 System.out.println("Far enough");
                     if(space ==4) //logic for queenside castling 
                     {
                         int i = c2-1; 
@@ -61,14 +57,12 @@ public class Rook extends Piece
                         int  i= c1 -1; 
                         while(i>=5)
                         { 
-                            System.out.println("i:"+i+" r1:"+r1);
                             if(chessboard[r1][i]!=null)
                             { 
                                 System.out.println("False");
                                 return 0; 
                             }
                             i--; 
-
                         }  
                        // hasMoved=true;
                         return 1; 
