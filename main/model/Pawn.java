@@ -19,15 +19,23 @@ public class Pawn extends Piece
         {
             if (chessboard[r2][c2] != null)
             {
-                if (r2 == r1 - 1 && c1 == c2 + 1 && !chessboard[r2][c2].getColor())
+                if (r2 == r1 - 1 && c1 == c2 + 1 && !chessboard[r2][c2].getColor()) {
+                    hasMoved = true;
                     return true;
-                else if (r2 == r1 - 1 && c1 == c2 - 1 && !chessboard[r2][c2].getColor())
+                }
+                else if (r2 == r1 - 1 && c1 == c2 - 1 && !chessboard[r2][c2].getColor()){
+                    hasMoved = true;
                     return true;
+                }
             }     
-            if (!hasMoved && r2 == r1 - 2 && c1 == c2 && chessboard[r2][c2] == null)
+            if (!hasMoved && r2 == r1 - 2 && c1 == c2 && chessboard[r2][c2] == null) {
+                hasMoved = true;
                 return true;
-            else if (r2 == r1 - 1 && c1 == c2 && chessboard[r2][c2] == null)
+            }
+            else if (r2 == r1 - 1 && c1 == c2 && chessboard[r2][c2] == null) {
+                hasMoved = true;
                 return true;
+            }
                 
             else 
                 return false;
@@ -36,16 +44,23 @@ public class Pawn extends Piece
         {
             if (chessboard[r2][c2] != null)
             {
-                if (r2 == r1 + 1 && c1 == c2 + 1 && chessboard[r2][c2].getColor())
+                if (r2 == r1 + 1 && c1 == c2 + 1 && chessboard[r2][c2].getColor()) {
+                    hasMoved = true;
                     return true;
-                else if (r2 == r1 + 1 && c1 == c2 - 1 && chessboard[r2][c2].getColor())
+                }
+                else if (r2 == r1 + 1 && c1 == c2 - 1 && chessboard[r2][c2].getColor()) {
+                    hasMoved = true;
                     return true;
+                }
             }
-            if (!hasMoved && r2 == r1 + 2 && c1 == c2 && chessboard[r2][c2] == null)
+            if (!hasMoved && r2 == r1 + 2 && c1 == c2 && chessboard[r2][c2] == null) {
+                hasMoved = true;
                 return true;
-            else if (r2 == r1 + 1 && c1 == c2 && chessboard[r2][c2] == null)
+            }
+            else if (r2 == r1 + 1 && c1 == c2 && chessboard[r2][c2] == null) {
+                hasMoved = true;
                 return true;
-            
+            }
             else 
                 return false;
         }
