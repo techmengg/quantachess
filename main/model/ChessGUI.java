@@ -197,74 +197,53 @@ public class ChessGUI {
         return button;
     }
 
-  
-private void buttonClicked(JButton b, int row, int col) {
-    if (selectedButton == null) {
-        // No piece selected yet, select this piece
-        if (chess.getChessBoard()[row][col] != null) {
-            selectedButton = b;
-            selectedRow = row;
-            selectedCol = col;
-        }
-    } else if (chess.validate(selectedRow, selectedCol, row, col, chess.getChessBoard(), turn)) {
-        // Move the piece to the new position
-        System.out.println(selectedRow + "/" + selectedCol + " to " + row + "/" + col);
-        chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
-        selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+    private void buttonClicked(JButton b, int row, int col) {
+        if (selectedButton == null) {
+            // No piece selected yet, select this piece
+            if (chess.getChessBoard()[row][col] != null) {
+                selectedButton = b;
+                selectedRow = row;
+                selectedCol = col;
+            }
+        } else if (chess.validate(selectedRow, selectedCol, row, col, chess.getChessBoard(), turn)) {
+            // Move the piece to the new position
+            System.out.println(selectedRow + "/" + selectedCol + " to " + row + "/" + col);
+            chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
+            selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
 
-        int promote = chess.promote(row, col, chess.getChessBoard());
-        if (promote == 1) {
-            chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[WHITE][KING]));
-        } else if (promote == 2) {
-            chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[BLACK][KING]));
-        }
+            int promote = chess.promote(row, col, chess.getChessBoard());
+            if (promote == 1) {
+                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[WHITE][KING]));
+            } else if (promote == 2) {
+                chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[BLACK][KING]));
+            }
 
-        selectedButton = null;
-        selectedRow = -1;
-        selectedCol = -1;
-
-        // Switch timers
-        if (turn) {
-            whiteTimer.stop();
-            blackTimer.start();
+            selectedButton = null;
+            selectedRow = -1;
+            selectedCol = -1;
+    
+            // Switch timers
+            if (turn) {
+                whiteTimer.stop();
+                blackTimer.start();
+            } else {
+                blackTimer.stop();
+                whiteTimer.start();
+            }
+    
+            turn = !turn;
         } else {
-            blackTimer.stop();
+            selectedButton = null;
+            selectedRow = -1;
+            selectedCol = -1;
+        }
+    
+        // Start the timers only if the "New" button is clicked
+        if (b == newButton) {
             whiteTimer.start();
+            blackTimer.stop(); // Stop black timer at the beginning
         }
-
-        int type = chess.castlingType(selectedRow, selectedCol, row, col); // Determine the type of castling
-        if (type == 1) {
-            System.out.println("0-0"); // Chess notation for kingside castle
-            chess.movePiece(selectedRow, selectedCol, row, 5);
-            chess.movePiece(row, col, row, 6);
-            chessBoardSquares[selectedCol][selectedRow].setIcon(null); // Remove the rook icon from the board
-            chessBoardSquares[5][selectedRow].setIcon(new ImageIcon(chessPieceImages[selectedRow][ROOK]));
-            chessBoardSquares[col][row].setIcon(null); // Remove the king image from its position
-            chessBoardSquares[6][row].setIcon(new ImageIcon(chessPieceImages[selectedRow][KING]));
-        } else if (type == 2) {
-            System.out.println("0-0-0"); // Chess notation for queenside castle
-            chess.movePiece(selectedRow, selectedCol, row, 3);
-            chess.movePiece(row, col, row, 2);
-            chessBoardSquares[selectedCol][selectedRow].setIcon(null);
-            chessBoardSquares[3][selectedRow].setIcon(new ImageIcon(chessPieceImages[selectedRow][ROOK]));
-            chessBoardSquares[col][row].setIcon(null);
-            chessBoardSquares[2][row].setIcon(new ImageIcon(chessPieceImages[selectedRow][KING]));
-        }
-
-        turn = !turn;
-
-    } else {
-        selectedButton = null;
-        selectedRow = -1;
-        selectedCol = -1;
-    }
-
-    // Start the timers only if the "New" button is clicked
-    if (b == newButton) {
-        whiteTimer.start();
-        blackTimer.stop(); // Stop black timer at the beginning
-    }
-}   
+    }    
     
     public final JComponent getGui() {
         return gui;
