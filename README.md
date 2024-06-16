@@ -9,7 +9,7 @@
 
 QuantaChess is a simple chess game implemented in Java with a graphical user interface (GUI).
 
-## How to Play
+## How to Play:
 
 1. **Starting a New Game:**
    - Click on the "New" button to start a new game. This resets the board to the initial state and starts the timers.
