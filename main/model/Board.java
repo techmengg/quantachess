@@ -57,7 +57,6 @@ public class Board
     {
         isInCheck(r1, c1, r2, c2, board, turn);
 
-        
         System.out.println(check);
         if (board[r1][c1] == null)
             return false;
@@ -414,12 +413,14 @@ public class Board
             kc1 = Integer.parseInt(blackKing.substring(2, 3)); 
         }
 
-        if (checkSquare(kr1, kc1, kr1, kc1, board))             
+        if (checkSquare(kr1, kc1, kr1, kc1, board)) 
+        {            
             check = true;
+            isOutOfCheck(r1, c1, r2, c2, board, turn);
+        }
         else 
             check = false;
 
-        isOutOfCheck(r1, c1, r2, c2, board, turn);
     }
 
     public void isOutOfCheck(int r1, int c1, int r2, int c2, Piece[][] board, boolean turn)
@@ -433,6 +434,8 @@ public class Board
 
         temp[r2][c2] = temp[r1][c1];
         temp[r1][c1] = null; 
+
+        System.out.println("Before or after");
 
         if (temp[r2][c2] instanceof King)
         {
