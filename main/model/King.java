@@ -1,8 +1,12 @@
 package main.model;
 
 public class King extends Piece {
+
+    boolean inCheck;
+
     public King(boolean color) {
         super(color);
+        inCheck = false;
     }
 
     @Override
@@ -25,5 +29,4 @@ public class King extends Piece {
 
         // Swap place with the rook (Castling)
     }
-
 }

@@ -1,4 +1,4 @@
-package main.model;
+/* package main.model;
 
 public class notation {
     private String [] alphabet = {"A","B","C","D","E","F","G","H"};
@@ -20,3 +20,4 @@ public class notation {
 
 
 }
+*/
