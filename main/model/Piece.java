@@ -3,10 +3,11 @@ package main.model;
 public class Piece 
 {
     private boolean color;
-
+    private boolean hasMoved;
     public Piece() 
     {
-        color = true;
+        color = true; 
+        hasMoved = false; 
     }
 
     public Piece(boolean color)
@@ -22,6 +23,11 @@ public class Piece
     public boolean canMove(int r1, int c1, int r2, int c2, Piece[][] chessboard)
     {
         return false;
+    }  
+
+    public boolean gethasMoved()
+    {
+        return hasMoved; 
     }
 
     

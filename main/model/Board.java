@@ -171,7 +171,22 @@ public class Board
         // check for knights
 
         return false;
+    } 
+
+    public void movePiece(int r1, int c1, int r2, int c2) //required for implementing castling code
+    {
+        if(chessBoard[r2][c2]==null)
+        {
+           chessBoard[r2][c2]=chessBoard[r1][c1]; 
+           chessBoard[r1][c1]=null; 
+        } 
+    } 
+
+    public Piece getPiece(int row, int col) 
+    { 
+        return chessBoard[row][col];
     }
+
 
     public boolean checkDiagonals(int r1, int c1, int sr, int sc, Piece[][] chessboard)
     {
