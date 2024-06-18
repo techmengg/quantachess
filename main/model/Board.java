@@ -3,6 +3,10 @@ package main.model;
 public class Board
 {
     private Piece[][] chessBoard;
+    String whiteKing;
+    String blackKing;
+    boolean check;
+    boolean resign;
 
     public Board()
     {
@@ -42,41 +46,64 @@ public class Board
         chessBoard[6][4] = new Pawn(true);
         chessBoard[6][5] = new Pawn(true);
         chessBoard[6][6] = new Pawn(true);
-        chessBoard[6][7] = new Pawn(true);     
+        chessBoard[6][7] = new Pawn(true);   
+
+        whiteKing = "7/4";
+        blackKing = "0/4";
+
+        check = false;
+        resign = false;
     }
 
     public boolean validate(int r1, int c1, int r2, int c2, Piece[][] board, boolean turn)
     {
-        if (chessBoard[r1][c1] == null)
-            return false;
-
-        if (chessBoard[r1][c1].getColor() != turn)
-            return false;
-
-        if (chessBoard[r1][c1].canMove(r1, c1, r2, c2, board) && !(chessBoard[r1][c1] instanceof King))
+        if (!resign)
         {
-            chessBoard[r2][c2] = chessBoard[r1][c1];
-            chessBoard[r1][c1] = null; 
-            return true;            
-        }
-        if (chessBoard[r1][c1] instanceof King)
-        {
-            String[][] moves = squaresTheKingCanMove(r1, c1, board);
-            for (int i = 0; i < moves.length; i++)
+            isInCheck(r1, c1, r2, c2, board, turn);
+            isOutOfCheck(r1, c1, r2, c2, board, turn);
+
+            System.out.println(check);
+            if (board[r1][c1] == null)
+                return false;
+
+            if (board[r1][c1].getColor() != turn)
+                return false;
+
+            if (check)
+                return false;
+
+            if (board[r1][c1].canMove(r1, c1, r2, c2, board) && !(board[r1][c1] instanceof King))
             {
-                for (int j = 0; j < moves[i].length; j++)
+                board[r2][c2] = board[r1][c1];
+                board[r1][c1] = null; 
+                return true;            
+            } 
+
+            if (board[r1][c1] instanceof King)
+            {
+                String[][] moves = squaresTheKingCanMove(r1, c1, board);
+                for (int i = 0; i < moves.length; i++)
                 {
-                    if (moves[i][j] != null)
+                    for (int j = 0; j < moves[i].length; j++)
                     {
-                        if (r2 == Integer.parseInt(moves[i][j].substring(0, 1)) && c2 == Integer.parseInt(moves[i][j].substring(2, 3)))
+                        if (moves[i][j] != null)
                         {
-                            chessBoard[r2][c2] = chessBoard[r1][c1];
-                            chessBoard[r1][c1] = null; 
-                            return true;
+                            if (r2 == Integer.parseInt(moves[i][j].substring(0, 1)) && c2 == Integer.parseInt(moves[i][j].substring(2, 3)))
+                            {
+                                board[r2][c2] = board[r1][c1];
+                                board[r1][c1] = null; 
+
+                                if (board[r2][c2].getColor())
+                                    whiteKing = r2 + "/" + c2;
+                                else
+                                    blackKing = r2 + "/" + c2;
+                                return true;
+                            }
                         }
                     }
                 }
             }
+            return false;
         }
         return false;
     }
@@ -88,13 +115,13 @@ public class Board
 
     public int promote(int r, int c, Piece[][] board)
     {
-        if (chessBoard[r][c] instanceof Pawn)
+        if (board[r][c] instanceof Pawn)
         {
-            if (chessBoard[r][c].getColor())
+            if (board[r][c].getColor())
             {
                 if (r == 0)
                 {
-                    chessBoard[r][c] = new Queen(true);
+                    board[r][c] = new Queen(true);
                     return 1;
                 }
             }
@@ -102,7 +129,7 @@ public class Board
             {
                 if (r == 7)
                 {
-                    chessBoard[r][c] = new Queen(false);
+                    board[r][c] = new Queen(false);
                     return 2;
                 }
             }
@@ -110,7 +137,7 @@ public class Board
         return 0;
     }
 
-    public String[][] squaresTheKingCanMove(int r1, int c1, Piece[][] chessboard) 
+    public String[][] squaresTheKingCanMove(int r1, int c1, Piece[][] board) 
     {
         String[][] moves = new String[3][3];
 
@@ -132,7 +159,7 @@ public class Board
         {
             for (int j = sc; j <= ec; j++)
             {
-                if (chessboard[r1][c1].canMove(r1, c1, r1 + i - 1, c1 + j - 1, chessboard) && !checkSquare(r1, c1, r1 + i - 1 , c1 + j - 1, chessboard))
+                if (board[r1][c1].canMove(r1, c1, r1 + i - 1, c1 + j - 1, board) && !checkSquare(r1, c1, r1 + i - 1 , c1 + j - 1, board))
                     moves[i][j] = (r1 + i - 1) + "/" + (c1 + j - 1);
             }  
         }
@@ -150,21 +177,22 @@ public class Board
         return moves;
     }
 
-    public boolean checkSquare(int r1, int c1, int sr, int sc, Piece[][] chessboard)
+    public boolean checkSquare(int r1, int c1, int sr, int sc, Piece[][] board)
     {
-        if (checkDiagonals(r1, c1, sr, sc, chessboard))
+        
+        if (checkDiagonals(r1, c1, sr, sc, board))
             return true;
 
-        if (checkHorizontals(r1, c1, sr, sc, chessboard))
+        if (checkHorizontals(r1, c1, sr, sc, board))
             return true;
 
-        if (checkKnights(r1, c1, sr, sc, chessboard))
+        if (checkKnights(r1, c1, sr, sc, board))
             return true;
 
-        if (checkPawns(r1, c1, sr, sc, chessboard))
+        if (checkPawns(r1, c1, sr, sc, board))
             return true;
 
-        if (checkKings(r1, c1, sr, sc, chessboard))
+        if (checkKings(r1, c1, sr, sc, board))
             return true;
 
         // check vertical and horizontals for rooks and queens
@@ -186,9 +214,8 @@ public class Board
     { 
         return chessBoard[row][col];
     }
-
-
-    public boolean checkDiagonals(int r1, int c1, int sr, int sc, Piece[][] chessboard)
+  
+    public boolean checkDiagonals(int r1, int c1, int sr, int sc, Piece[][] board)
     {
         int changerow = 1;
         int changecol = 1;
@@ -205,7 +232,10 @@ public class Board
             if (i == 3)  
                 changerow = 1;
 
-            while (row >= 0 && row <= 7 && col >= 0 && col <= 7 && chessboard[row][col] == null)
+            row += changerow;
+            col += changecol;
+
+            while (row >= 0 && row <= 7 && col >= 0 && col <= 7 && board[row][col] == null)
             {
                 row += changerow;
                 col += changecol;
@@ -213,7 +243,7 @@ public class Board
 
             if (row >= 0 && row <= 7 && col >= 0 && col <= 7)
             {
-                if ((chessboard[row][col] instanceof Bishop || chessboard[row][col] instanceof Queen) && chessboard[r1][c1].getColor() != chessboard[row][col].getColor())
+                if ((board[row][col] instanceof Bishop || board[row][col] instanceof Queen) && board[r1][c1].getColor() != board[row][col].getColor())
                     return true; 
             }
 
@@ -221,7 +251,7 @@ public class Board
         return false;
     }
 
-    public boolean checkHorizontals(int r1, int c1, int sr, int sc, Piece[][] chessboard)
+    public boolean checkHorizontals(int r1, int c1, int sr, int sc, Piece[][] board)
     {
         int changerow = 1;
         int changecol = 0;
@@ -247,7 +277,10 @@ public class Board
                 changecol = -1; 
             }
 
-            while (row >= 0 && row <= 7 && col >= 0 && col <= 7 && chessboard[row][col] == null)
+            row += changerow;
+            col += changecol;
+
+            while (row >= 0 && row <= 7 && col >= 0 && col <= 7 && board[row][col] == null)
             {
                 row += changerow;
                 col += changecol;
@@ -255,7 +288,7 @@ public class Board
 
             if (row >= 0 && row <= 7 && col >= 0 && col <= 7)
             {
-                if ((chessboard[row][col] instanceof Rook || chessboard[row][col] instanceof Queen) && chessboard[r1][c1].getColor() != chessboard[row][col].getColor())
+                if ((board[row][col] instanceof Rook || board[row][col] instanceof Queen) && board[r1][c1].getColor() != board[row][col].getColor())
                     return true; 
             } 
             
@@ -263,7 +296,7 @@ public class Board
         return false;
     }
 
-    public boolean checkKnights(int r1, int c1, int sr, int sc, Piece[][] chessboard)
+    public boolean checkKnights(int r1, int c1, int sr, int sc, Piece[][] board)
     {
         int changerow = 2;
         int changecol = 1;
@@ -311,19 +344,19 @@ public class Board
 
             if (row >= 0 && row <= 7 && col >= 0 && col <= 7)
             {
-                if (chessboard[row][col] instanceof Knight && chessboard[r1][c1].getColor() != chessboard[row][col].getColor())
+                if (board[row][col] instanceof Knight && board[r1][c1].getColor() != board[row][col].getColor())
                     return true; 
             }
         }
         return false;
     }
 
-    public boolean checkPawns(int r1, int c1, int sr, int sc, Piece[][] chessboard)
+    public boolean checkPawns(int r1, int c1, int sr, int sc, Piece[][] board)
     {
         int changerow;
         int changecol = 1;
 
-        if (chessboard[r1][c1].getColor())
+        if (board[r1][c1].getColor())
             changerow = -1;
         else
             changerow = 1;
@@ -343,19 +376,19 @@ public class Board
 
             if (row >= 0 && row <= 7 && col >= 0 && col <= 7)
             {
-                if (chessboard[row][col] instanceof Pawn && chessboard[r1][c1].getColor() != chessboard[row][col].getColor())
+                if (board[row][col] instanceof Pawn && board[r1][c1].getColor() != board[row][col].getColor())
                     return true; 
             }
         }
         return false;
     }
 
-    public boolean checkKings(int r1, int c1, int sr, int sc, Piece[][] chessboard)
+    public boolean checkKings(int r1, int c1, int sr, int sc, Piece[][] board)
     {
         int changerow;
         int changecol = -1;
 
-        if (chessboard[r1][c1].getColor())
+        if (board[r1][c1].getColor())
             changerow = -1;
         else
             changerow = 1;
@@ -379,13 +412,89 @@ public class Board
 
             if (row >= 0 && row <= 7 && col >= 0 && col <= 7)
             {
-                if (chessboard[row][col] instanceof King && chessboard[r1][c1].getColor() != chessboard[row][col].getColor())
+                if (board[row][col] instanceof King && board[r1][c1].getColor() != board[row][col].getColor())
                     return true; 
             }
         }
         return false;
     }
 
+    public void isInCheck(int r1, int c1, int r2, int c2, Piece[][] board, boolean turn)
+    {
+        int kr1;
+        int kc1;
+        if (turn)
+        {
+            kr1 = Integer.parseInt(whiteKing.substring(0, 1));
+            kc1 = Integer.parseInt(whiteKing.substring(2, 3));
+        }
+        else 
+        {
+            kr1 = Integer.parseInt(blackKing.substring(0, 1));
+            kc1 = Integer.parseInt(blackKing.substring(2, 3)); 
+        }
+
+        if (checkSquare(kr1, kc1, kr1, kc1, board)) 
+        {            
+            check = true;
+        }
+        else 
+            check = false;
+
+    }
+
+    public void isOutOfCheck(int r1, int c1, int r2, int c2, Piece[][] board, boolean turn)
+    {
+        String tempWhiteKing = whiteKing;
+        String tempBlackKing = blackKing;
 
 
+        Piece[][] temp = new Piece[8][8];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                temp[i][j] = board[i][j];
+            }
+        }
+
+        temp[r2][c2] = temp[r1][c1];
+        temp[r1][c1] = null; 
+
+        if (temp[r2][c2] instanceof King)
+        {
+            if (temp[r2][c2].getColor())
+                tempWhiteKing = r2 + "/" + c2;
+            else
+                tempBlackKing = r2 + "/" + c2;
+        }
+
+        int kr1;
+        int kc1;
+
+        if (turn)
+        {
+            kr1 = Integer.parseInt(tempWhiteKing.substring(0, 1));
+            kc1 = Integer.parseInt(tempWhiteKing.substring(2, 3));
+        }
+        else 
+        {
+            kr1 = Integer.parseInt(tempBlackKing.substring(0, 1));
+            kc1 = Integer.parseInt(tempBlackKing.substring(2, 3)); 
+        }
+        
+
+        if (checkSquare(kr1, kc1, kr1, kc1, temp))             
+            check = true;
+        else 
+            check = false;
+    }
+
+    public void setResign(boolean value)
+    {
+        resign = value;
+    }
+
+    public boolean getResign()
+    {
+        return resign;
+    }
 }

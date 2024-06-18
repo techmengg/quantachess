@@ -1,7 +1,8 @@
 package main.model;
 
 public class King extends Piece { 
-    public static boolean hasMoved; //required for castling logic
+    private boolean hasMoved; //required for castling logic
+  
     public King(boolean color) {
         super(color); 
         hasMoved = false;
@@ -10,7 +11,6 @@ public class King extends Piece {
 
     public boolean gethasMoved()
     {
-
         return hasMoved;
     } 
 
@@ -34,5 +34,4 @@ public class King extends Piece {
        
         // Swap place with the rook (Castling)
     }
-
 }
