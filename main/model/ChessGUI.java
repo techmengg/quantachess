@@ -210,10 +210,8 @@ public class ChessGUI {
             }
         } else if (chess.validate(selectedRow, selectedCol, row, col, chess.getChessBoard(), turn)) {
             // Move the piece to the new position
-            System.out.println(selectedRow + "/" + selectedCol + " to " + row + "/" + col);
             chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
             selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
-
             int promote = chess.promote(row, col, chess.getChessBoard());
             if (promote == 1) {
                 chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[WHITE][KING]));
@@ -235,13 +233,14 @@ public class ChessGUI {
             }
     
             turn = !turn;
-        }else if(Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(),turn)>0) //castling methods 
+        }
+        else if(Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(),turn)>0) //castling methods 
         {
             int type = Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(), turn); 
             int pcol = 1; 
             if(!turn) //seems unneccessairy but boolean cant be an int so medium required.
             {
-                pcol=0;
+                pcol = 0;
             }
             if(type == 1)
             {   
@@ -252,6 +251,10 @@ public class ChessGUI {
                 chessBoardSquares[5][selectedRow].setIcon(new ImageIcon(chessPieceImages[pcol][ROOK]));  
                 chessBoardSquares[col][row].setIcon(null); // removes the king image from it's position
                 chessBoardSquares[6][row].setIcon(new ImageIcon(chessPieceImages[pcol][QUEEN]));  
+                if (turn)
+                    chess.setWhiteKing(row + "/" + 6);
+                else
+                    chess.setBlackKing(row + "/" + 6);
 
             }   
             if(type == 2) 
@@ -266,6 +269,10 @@ public class ChessGUI {
                 chessBoardSquares[3][selectedRow].setIcon(new ImageIcon(chessPieceImages[pcol][ROOK])); 
                 chessBoardSquares[col][row].setIcon(null); 
                 chessBoardSquares[2][row].setIcon(new ImageIcon(chessPieceImages[pcol][QUEEN]));  
+                if (turn)
+                    chess.setWhiteKing(row + "/" + 2);
+                else
+                    chess.setBlackKing(row + "/" + 2);
             } 
 
             selectedButton = null;
@@ -436,7 +443,7 @@ public class ChessGUI {
                 f.pack();
                 f.setMinimumSize(f.getSize());
                 f.setVisible(true);
-                notation testiner = new notation();
+                //notation testiner = new notation();
                // testiner.printBoard();
             }
         };
@@ -447,9 +454,9 @@ public class ChessGUI {
     {
             chess.setResign(true);
             if (turn)
-                message.setText("Black wins!");
+                JOptionPane.showMessageDialog(gui, "Black wins by resignation!");
             else 
-                message.setText("White wins!");
+                JOptionPane.showMessageDialog(gui, "White wins by resignation!");
 
     }
 }

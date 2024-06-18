@@ -3,10 +3,10 @@ package main.model;
 public class Board
 {
     private Piece[][] chessBoard;
-    String whiteKing;
-    String blackKing;
-    boolean check;
-    boolean resign;
+    private String whiteKing;
+    private String blackKing;
+    private boolean check;
+    private boolean resign;
 
     public Board()
     {
@@ -62,7 +62,6 @@ public class Board
             isInCheck(r1, c1, r2, c2, board, turn);
             isOutOfCheck(r1, c1, r2, c2, board, turn);
 
-            System.out.println(check);
             if (board[r1][c1] == null)
                 return false;
 
@@ -164,16 +163,6 @@ public class Board
             }  
         }
 
-        // Print the moves array
-        for (int i = 0; i < moves.length; i++)
-        {
-            for (int j = 0; j < moves[i].length; j++)
-            {
-                System.out.print(moves[i][j] + " ");
-            }
-            System.out.println();
-        }
-
         return moves;
     }
 
@@ -194,9 +183,6 @@ public class Board
 
         if (checkKings(r1, c1, sr, sc, board))
             return true;
-
-        // check vertical and horizontals for rooks and queens
-        // check for knights
 
         return false;
     } 
@@ -496,5 +482,15 @@ public class Board
     public boolean getResign()
     {
         return resign;
+    }
+
+    public void setWhiteKing(String value)
+    {
+        whiteKing = value;
+    }
+
+    public void setBlackKing(String value)
+    {
+        blackKing = value;
     }
 }

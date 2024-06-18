@@ -23,10 +23,10 @@ public class Rook extends Piece {
                  int space = Math.abs(c2-c1);       
                     if(space ==4) //logic for queenside castling 
                     {
-                        int i = c2-1; 
-                        while(i>=1)
+                        int i = c2 - 1; 
+                        while(i >= 1)
                         {  
-                            if(chessboard[r1][i]!=null)
+                            if(chessboard[r1][i] != null)
                             {
 
                                 return 0; 
@@ -39,12 +39,12 @@ public class Rook extends Piece {
 
 
                     } 
-                    else if(space== 3)// logic for kingside castling
+                    else if (space == 3)// logic for kingside castling
                     { 
-                        int  i= c1 -1; 
-                        while(i>=5)
+                        int  i = c1 -1; 
+                        while(i >= 5)
                         { 
-                            if(chessboard[r1][i]!=null)
+                            if(chessboard[r1][i] != null)
                             { 
 
                                 return 0; 
