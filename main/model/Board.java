@@ -56,6 +56,7 @@ public class Board
     public boolean validate(int r1, int c1, int r2, int c2, Piece[][] board, boolean turn)
     {
         isInCheck(r1, c1, r2, c2, board, turn);
+        isOutOfCheck(r1, c1, r2, c2, board, turn);
 
         System.out.println(check);
         if (board[r1][c1] == null)
@@ -416,7 +417,6 @@ public class Board
         if (checkSquare(kr1, kc1, kr1, kc1, board)) 
         {            
             check = true;
-            isOutOfCheck(r1, c1, r2, c2, board, turn);
         }
         else 
             check = false;
@@ -425,6 +425,10 @@ public class Board
 
     public void isOutOfCheck(int r1, int c1, int r2, int c2, Piece[][] board, boolean turn)
     {
+        String tempWhiteKing = whiteKing;
+        String tempBlackKing = blackKing;
+
+
         Piece[][] temp = new Piece[8][8];
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
@@ -435,14 +439,12 @@ public class Board
         temp[r2][c2] = temp[r1][c1];
         temp[r1][c1] = null; 
 
-        System.out.println("Before or after");
-
         if (temp[r2][c2] instanceof King)
         {
             if (temp[r2][c2].getColor())
-                whiteKing = r2 + "/" + c2;
+                tempWhiteKing = r2 + "/" + c2;
             else
-                blackKing = r2 + "/" + c2;
+                tempBlackKing = r2 + "/" + c2;
         }
 
         int kr1;
@@ -450,13 +452,13 @@ public class Board
 
         if (turn)
         {
-            kr1 = Integer.parseInt(whiteKing.substring(0, 1));
-            kc1 = Integer.parseInt(whiteKing.substring(2, 3));
+            kr1 = Integer.parseInt(tempWhiteKing.substring(0, 1));
+            kc1 = Integer.parseInt(tempWhiteKing.substring(2, 3));
         }
         else 
         {
-            kr1 = Integer.parseInt(blackKing.substring(0, 1));
-            kc1 = Integer.parseInt(blackKing.substring(2, 3)); 
+            kr1 = Integer.parseInt(tempBlackKing.substring(0, 1));
+            kc1 = Integer.parseInt(tempBlackKing.substring(2, 3)); 
         }
         
 
