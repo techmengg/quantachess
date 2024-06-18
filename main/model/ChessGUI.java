@@ -395,6 +395,8 @@ public class ChessGUI {
                 f.pack();
                 f.setMinimumSize(f.getSize());
                 f.setVisible(true);
+                notation testiner = new notation();
+               // testiner.printBoard();
             }
         };
         SwingUtilities.invokeLater(r);
