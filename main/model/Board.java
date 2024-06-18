@@ -6,6 +6,7 @@ public class Board
     String whiteKing;
     String blackKing;
     boolean check;
+    boolean resign;
 
     public Board()
     {
@@ -51,53 +52,58 @@ public class Board
         blackKing = "0/4";
 
         check = false;
+        resign = false;
     }
 
     public boolean validate(int r1, int c1, int r2, int c2, Piece[][] board, boolean turn)
     {
-        isInCheck(r1, c1, r2, c2, board, turn);
-        isOutOfCheck(r1, c1, r2, c2, board, turn);
-
-        System.out.println(check);
-        if (board[r1][c1] == null)
-            return false;
-
-        if (board[r1][c1].getColor() != turn)
-            return false;
-
-        if (check)
-            return false;
-
-        if (board[r1][c1].canMove(r1, c1, r2, c2, board) && !(board[r1][c1] instanceof King))
+        if (!resign)
         {
-            board[r2][c2] = board[r1][c1];
-            board[r1][c1] = null; 
-            return true;            
-        } 
+            isInCheck(r1, c1, r2, c2, board, turn);
+            isOutOfCheck(r1, c1, r2, c2, board, turn);
 
-        if (board[r1][c1] instanceof King)
-        {
-            String[][] moves = squaresTheKingCanMove(r1, c1, board);
-            for (int i = 0; i < moves.length; i++)
+            System.out.println(check);
+            if (board[r1][c1] == null)
+                return false;
+
+            if (board[r1][c1].getColor() != turn)
+                return false;
+
+            if (check)
+                return false;
+
+            if (board[r1][c1].canMove(r1, c1, r2, c2, board) && !(board[r1][c1] instanceof King))
             {
-                for (int j = 0; j < moves[i].length; j++)
-                {
-                    if (moves[i][j] != null)
-                    {
-                        if (r2 == Integer.parseInt(moves[i][j].substring(0, 1)) && c2 == Integer.parseInt(moves[i][j].substring(2, 3)))
-                        {
-                            board[r2][c2] = board[r1][c1];
-                            board[r1][c1] = null; 
+                board[r2][c2] = board[r1][c1];
+                board[r1][c1] = null; 
+                return true;            
+            } 
 
-                            if (board[r2][c2].getColor())
-                                whiteKing = r2 + "/" + c2;
-                            else
-                                blackKing = r2 + "/" + c2;
-                            return true;
+            if (board[r1][c1] instanceof King)
+            {
+                String[][] moves = squaresTheKingCanMove(r1, c1, board);
+                for (int i = 0; i < moves.length; i++)
+                {
+                    for (int j = 0; j < moves[i].length; j++)
+                    {
+                        if (moves[i][j] != null)
+                        {
+                            if (r2 == Integer.parseInt(moves[i][j].substring(0, 1)) && c2 == Integer.parseInt(moves[i][j].substring(2, 3)))
+                            {
+                                board[r2][c2] = board[r1][c1];
+                                board[r1][c1] = null; 
+
+                                if (board[r2][c2].getColor())
+                                    whiteKing = r2 + "/" + c2;
+                                else
+                                    blackKing = r2 + "/" + c2;
+                                return true;
+                            }
                         }
                     }
                 }
             }
+            return false;
         }
         return false;
     }
@@ -468,6 +474,13 @@ public class Board
             check = false;
     }
 
+    public void setResign(boolean value)
+    {
+        resign = value;
+    }
 
-   
+    public boolean getResign()
+    {
+        return resign;
+    }
 }

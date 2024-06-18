@@ -38,6 +38,7 @@ public class ChessGUI {
 
     private JButton newButton;
     private JButton themeButton;
+    private JButton resignButton;
 
     ChessGUI() {
         initializeGui();
@@ -61,9 +62,11 @@ public class ChessGUI {
     
         newButton = createStyledButton("New", e -> setupNewGame());
         themeButton = createStyledButton("Theme", e -> toggleTheme());
+        resignButton = createStyledButton("Resign", e -> forfeitGame());
     
         tools.add(newButton);
         tools.add(themeButton);
+        tools.add(resignButton);
         
         tools.addSeparator();
         message.setForeground(Color.WHITE);
@@ -398,5 +401,15 @@ public class ChessGUI {
             }
         };
         SwingUtilities.invokeLater(r);
+    }
+
+    private void forfeitGame() 
+    {
+            chess.setResign(true);
+            if (turn)
+                message.setText("Black wins!");
+            else 
+                message.setText("White wins!");
+
     }
 }
