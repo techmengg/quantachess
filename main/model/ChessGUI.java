@@ -235,6 +235,44 @@ public class ChessGUI {
             }
     
             turn = !turn;
+        }else if(Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(),turn)>0) //castling methods 
+        {
+            int type = Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(), turn); 
+            int pcol = 1; 
+            if(!turn) //seems unneccessairy but boolean cant be an int so medium required.
+            {
+                pcol=0;
+            }
+            if(type == 1)
+            {   
+                System.out.println("0-0");//chess notation for kingside castle 
+                chess.movePiece(selectedRow, selectedCol,row, 5); 
+                chess.movePiece(row,col,row, 6);  
+                chessBoardSquares[selectedCol][selectedRow].setIcon(null); //removes the rook icon from the board  
+                chessBoardSquares[5][selectedRow].setIcon(new ImageIcon(chessPieceImages[pcol][ROOK]));  
+                chessBoardSquares[col][row].setIcon(null); // removes the king image from it's position
+                chessBoardSquares[6][row].setIcon(new ImageIcon(chessPieceImages[pcol][QUEEN]));  
+
+            }   
+            if(type == 2) 
+            { 
+                System.out.println("0-0-0");    //chess notation for kingside castle
+                //movements on board for rook 
+                chess.movePiece(selectedRow, selectedCol,row, 3);  
+                 // movements on board for king
+                chess.movePiece(row,col,row, 2); 
+
+                chessBoardSquares[selectedCol][selectedRow].setIcon(null); 
+                chessBoardSquares[3][selectedRow].setIcon(new ImageIcon(chessPieceImages[pcol][ROOK])); 
+                chessBoardSquares[col][row].setIcon(null); 
+                chessBoardSquares[2][row].setIcon(new ImageIcon(chessPieceImages[pcol][QUEEN]));  
+            } 
+
+            selectedButton = null;
+            selectedRow = -1;
+            selectedCol = -1; 
+            turn = !turn;  
+
         } else {
             selectedButton = null;
             selectedRow = -1;
@@ -398,6 +436,8 @@ public class ChessGUI {
                 f.pack();
                 f.setMinimumSize(f.getSize());
                 f.setVisible(true);
+                notation testiner = new notation();
+               // testiner.printBoard();
             }
         };
         SwingUtilities.invokeLater(r);
