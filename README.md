@@ -29,6 +29,10 @@ QuantaChess is a simple chess game implemented in Java with a graphical user int
 
 6. **Toggle Theme:**
    - Click on the "Theme" button to switch between light and dark themes.
+
+6. **Resignation:**
+   - When it is your turn, there is an option to click on the "Resign" button to give up, making the opponent win by resignation.
+
   
 ## Preview
 
