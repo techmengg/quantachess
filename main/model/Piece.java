@@ -4,6 +4,7 @@ public class Piece
 {
     private boolean color;
     private boolean hasMoved;
+    
     public Piece() 
     {
         color = true; 
@@ -25,10 +26,17 @@ public class Piece
         return false;
     }  
 
-    public boolean gethasMoved()
+    public boolean getHasMoved()
     {
         return hasMoved; 
     }
+
+    public void setHasMoved(boolean value)
+    {
+        hasMoved = value;
+    }
+
+
 
     
 }

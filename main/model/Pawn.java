@@ -2,12 +2,9 @@ package main.model;
 
 public class Pawn extends Piece
 {
-    private boolean hasMoved;
-
     public Pawn(boolean color)
     {
         super(color);     
-        hasMoved = false; 
     }
 
     public boolean canMove(int r1, int c1, int r2, int c2, Piece[][] chessboard)
@@ -20,20 +17,20 @@ public class Pawn extends Piece
             if (chessboard[r2][c2] != null)
             {
                 if (r2 == r1 - 1 && c1 == c2 + 1 && !chessboard[r2][c2].getColor()) {
-                    hasMoved = true;
+                    setHasMoved(true);
                     return true;
                 }
                 else if (r2 == r1 - 1 && c1 == c2 - 1 && !chessboard[r2][c2].getColor()){
-                    hasMoved = true;
+                    setHasMoved(true);
                     return true;
                 }
             }     
-            if (!hasMoved && r2 == r1 - 2 && c1 == c2 && chessboard[r2][c2] == null) {
-                hasMoved = true;
+            if (!getHasMoved() && r2 == r1 - 2 && c1 == c2 && chessboard[r2][c2] == null) {
+                setHasMoved(true);
                 return true;
             }
             else if (r2 == r1 - 1 && c1 == c2 && chessboard[r2][c2] == null) {
-                hasMoved = true;
+                setHasMoved(true);
                 return true;
             }
                 
@@ -45,20 +42,20 @@ public class Pawn extends Piece
             if (chessboard[r2][c2] != null)
             {
                 if (r2 == r1 + 1 && c1 == c2 + 1 && chessboard[r2][c2].getColor()) {
-                    hasMoved = true;
+                    setHasMoved(true);
                     return true;
                 }
                 else if (r2 == r1 + 1 && c1 == c2 - 1 && chessboard[r2][c2].getColor()) {
-                    hasMoved = true;
+                    setHasMoved(true);
                     return true;
                 }
             }
-            if (!hasMoved && r2 == r1 + 2 && c1 == c2 && chessboard[r2][c2] == null) {
-                hasMoved = true;
+            if (!getHasMoved() && r2 == r1 + 2 && c1 == c2 && chessboard[r2][c2] == null) {
+                setHasMoved(true);
                 return true;
             }
             else if (r2 == r1 + 1 && c1 == c2 && chessboard[r2][c2] == null) {
-                hasMoved = true;
+                setHasMoved(true);
                 return true;
             }
             else 

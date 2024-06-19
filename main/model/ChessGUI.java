@@ -234,9 +234,9 @@ public class ChessGUI {
     
             turn = !turn;
         }
-        else if(Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(),turn)>0) //castling methods 
+        else if (Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(),turn, chess.getCheck()) > 0) //castling methods 
         {
-            int type = Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(), turn); 
+            int type = Rook.castle(selectedRow, selectedCol, row, col,chess.getChessBoard(), turn, chess.getCheck()); 
             int pcol = 1; 
             if(!turn) //seems unneccessairy but boolean cant be an int so medium required.
             {
@@ -244,7 +244,6 @@ public class ChessGUI {
             }
             if(type == 1)
             {   
-                System.out.println("0-0");//chess notation for kingside castle 
                 chess.movePiece(selectedRow, selectedCol,row, 5); 
                 chess.movePiece(row,col,row, 6);  
                 chessBoardSquares[selectedCol][selectedRow].setIcon(null); //removes the rook icon from the board  
@@ -259,7 +258,6 @@ public class ChessGUI {
             }   
             if(type == 2) 
             { 
-                System.out.println("0-0-0");    //chess notation for kingside castle
                 //movements on board for rook 
                 chess.movePiece(selectedRow, selectedCol,row, 3);  
                  // movements on board for king
@@ -280,7 +278,8 @@ public class ChessGUI {
             selectedCol = -1; 
             turn = !turn;  
 
-        } else {
+        } 
+        else {
             selectedButton = null;
             selectedRow = -1;
             selectedCol = -1;

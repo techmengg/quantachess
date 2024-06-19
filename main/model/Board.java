@@ -74,7 +74,11 @@ public class Board
             if (board[r1][c1].canMove(r1, c1, r2, c2, board) && !(board[r1][c1] instanceof King))
             {
                 board[r2][c2] = board[r1][c1];
-                board[r1][c1] = null; 
+                board[r1][c1] = null;
+                
+                if (board[r1][c1] instanceof Rook)
+                    board[r1][c1].setHasMoved(true);
+                    
                 return true;            
             } 
 
@@ -96,7 +100,11 @@ public class Board
                                     whiteKing = r2 + "/" + c2;
                                 else
                                     blackKing = r2 + "/" + c2;
+
+                                board[r2][c2].setHasMoved(true);
+
                                 return true;
+    
                             }
                         }
                     }
@@ -426,7 +434,6 @@ public class Board
         }
         else 
             check = false;
-
     }
 
     public void isOutOfCheck(int r1, int c1, int r2, int c2, Piece[][] board, boolean turn)
@@ -443,7 +450,9 @@ public class Board
         }
 
         temp[r2][c2] = temp[r1][c1];
-        temp[r1][c1] = null; 
+
+        if (r1 != r2 || c1 != c2)
+            temp[r1][c1] = null; 
 
         if (temp[r2][c2] instanceof King)
         {
@@ -492,5 +501,10 @@ public class Board
     public void setBlackKing(String value)
     {
         blackKing = value;
+    }
+
+    public boolean getCheck()
+    {
+        return check;
     }
 }
