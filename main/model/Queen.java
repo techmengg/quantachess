@@ -1,8 +1,8 @@
 package main.model;
 
 public class Queen extends Piece {
-    public Queen(boolean color) {
-        super(color);
+    public Queen(boolean color , String type ) {
+        super(color, type);
     }
 
     public boolean canMove(int r1, int c1, int r2, int c2, Piece[][] chessboard) {

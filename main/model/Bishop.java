@@ -2,9 +2,9 @@ package main.model;
 
 public class Bishop extends Piece
 {
-    public Bishop(boolean color)
+    public Bishop(boolean color , String type)
     {
-        super(color);
+        super(color, type);
     }
 
 

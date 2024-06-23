@@ -7,7 +7,12 @@ public class notation {
     private String [][] notationalBoard = new String[9][9];
     private static String  notationFormat = "";
     private static int progression = 0;
+    private static String gameName = "";
+    private static String whiteName = "";
+    private static String blackName = "";
 
+
+     
 
     public notation() {
 
@@ -31,6 +36,16 @@ public class notation {
 
     }
    
+
+
+    public void setup() {
+
+
+
+
+
+
+    }
 
 
     public void pawnPromo() {

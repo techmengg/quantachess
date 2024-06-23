@@ -2,8 +2,8 @@ package main.model;
 
 public class King extends Piece { 
   
-    public King(boolean color) {
-        super(color); 
+    public King(boolean color , String type) {
+        super(color, type); 
     }
 
     @Override

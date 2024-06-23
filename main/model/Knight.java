@@ -1,8 +1,8 @@
 package main.model;
 
 public class Knight extends Piece {
-    public Knight(boolean color) {
-        super(color);
+    public Knight(boolean color, String type) {
+        super(color,type);
     }
 
     @Override
