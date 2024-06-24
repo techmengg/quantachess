@@ -191,7 +191,9 @@ public class notation {
 
     }
 
-
+    public static String getGameName() {
+        return gameName;
+    }
     public static void reset() {
         notationFormatG = "";
         notationFormatS = "";

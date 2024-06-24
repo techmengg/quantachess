@@ -440,6 +440,7 @@ public class ChessGUI {
                     StartScreen.Start();
                    
                     saveToFile.filegeneration();
+                    
                     try {
                         notation.importToTextFile();
                     } catch (IOException e) {

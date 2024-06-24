@@ -10,18 +10,32 @@ public class saveToFile {
 
     private static String fileLocation = "";
     private static ArrayList<String> allFileLocations = new ArrayList<String>();
-
+    private static int gameNum = 1;
     
 
     public static void filegeneration( ) {
-        
+        String fileName = "Game" + gameNum;
+        String folderDirectory = "main/Saves/";
         File savesFolder = new File(
-            "main/Saves");
+            folderDirectory + fileName);
+            savesFolder.exists();
+            try {
+                boolean isFileCreated = savesFolder.createNewFile();
+                if (isFileCreated) {
+                    System.out.println("File Created");
+                }
+                else {
+                    System.err.println("Already Exists");
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+                e.printStackTrace();
+            }
             fileLocation = savesFolder.toString();
 
         //Saves Directory of newly created file 
         allFileLocations.add(fileLocation);
-
+        gameNum++;
 
 
         
