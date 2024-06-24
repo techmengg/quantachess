@@ -22,7 +22,8 @@ public class notation {
     private static String gameName = "";
     private static String whiteName = "";
     private static String blackName = "";
-
+    private static String hosted = "";
+    private static String date = "";
 
      
 
@@ -182,4 +183,22 @@ public class notation {
 
 
     }
+
+    public static void grabStartDetails(String event, String site, String nameB, String nameW , String dateOccur) {
+        gameName = event;
+        hosted  = site;
+        date = dateOccur;
+        whiteName = nameW;
+        blackName = nameB;
+
+        notation.details();
+
+    }
+
+    public static void details() {
+       System.out.print(gameName + " " + hosted + " " + date + " " + whiteName + " " + blackName);
+    
+    }
+
+
 }

@@ -435,7 +435,12 @@ public class ChessGUI {
             @Override
             public void run() {
 
-                StartScreen.Start();
+              
+
+                    StartScreen.Start();
+
+                
+                
 
 
                 ChessGUI cg = new ChessGUI();
