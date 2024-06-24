@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.io.File;
+import java.io.IOException;
+
 import javax.imageio.ImageIO;
 
 public class ChessGUI {
@@ -21,12 +23,13 @@ public class ChessGUI {
     private static final int BLACK = 0, WHITE = 1;
     private static Board chess = new Board();
     private static boolean turn = true;
+    private static int nextPhase = 0;
     private final JLabel whiteTimerLabel = new JLabel("05:00", SwingConstants.CENTER); // Timer labels
     private final JLabel blackTimerLabel = new JLabel("05:00", SwingConstants.CENTER);
 
-    private Timer whiteTimer;
-    private Timer blackTimer;
-    
+    private  Timer whiteTimer;
+    private  Timer blackTimer;
+   // private static int startIst = ;
 
     private int whiteTimeRemaining = 300; // 5 minutes in seconds
     private int blackTimeRemaining = 300; // 5 minutes in seconds
@@ -36,15 +39,30 @@ public class ChessGUI {
     private int selectedRow = -1;  // Row of the selected piece
     private int selectedCol = -1;  // Column of the selected piece
 
+    private boolean startGame;
     private JButton newButton;
     private JButton themeButton;
     private JButton resignButton;
+   // private static JFrame f;
+   // private static ChessGUI gameInstance;
 
     ChessGUI() {
+        
         initializeGui();
+       
         toggleTheme(); // Set dark theme as default
         whiteTimer.stop(); // Stop the timers initially
         blackTimer.stop();
+         startGame = false; 
+        
+    }
+    public boolean getStartGame() {
+        return startGame;
+    }
+    
+    public void mainGameMaker() {
+                
+
     }
 
     public final void initializeGui() {
@@ -211,11 +229,15 @@ public class ChessGUI {
         } else if (chess.validate(selectedRow, selectedCol, row, col, chess.getChessBoard(), turn)) {
             // Move the piece to the new position
             chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
+           
             selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+
             int promote = chess.promote(row, col, chess.getChessBoard());
             if (promote == 1) {
+                notation.pawnPromo(row,col);
                 chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[WHITE][KING]));
             } else if (promote == 2) {
+                notation.pawnPromo(row,col);
                 chessBoardSquares[col][row].setIcon(new ImageIcon(chessPieceImages[BLACK][KING]));
             }
 
@@ -227,9 +249,11 @@ public class ChessGUI {
             if (turn) {
                 whiteTimer.stop();
                 blackTimer.start();
+                nextPhase ++;
             } else {
                 blackTimer.stop();
                 whiteTimer.start();
+                nextPhase ++;
             }
     
             turn = !turn;
@@ -250,11 +274,16 @@ public class ChessGUI {
                 chessBoardSquares[5][selectedRow].setIcon(new ImageIcon(chessPieceImages[pcol][ROOK]));  
                 chessBoardSquares[col][row].setIcon(null); // removes the king image from it's position
                 chessBoardSquares[6][row].setIcon(new ImageIcon(chessPieceImages[pcol][QUEEN]));  
-                if (turn)
+                if (turn) {
                     chess.setWhiteKing(row + "/" + 6);
-                else
+                    nextPhase ++;
+                }
+                    
+                else {
                     chess.setBlackKing(row + "/" + 6);
-
+                    nextPhase ++;
+                }
+                    
             }   
             if(type == 2) 
             { 
@@ -267,10 +296,16 @@ public class ChessGUI {
                 chessBoardSquares[3][selectedRow].setIcon(new ImageIcon(chessPieceImages[pcol][ROOK])); 
                 chessBoardSquares[col][row].setIcon(null); 
                 chessBoardSquares[2][row].setIcon(new ImageIcon(chessPieceImages[pcol][QUEEN]));  
-                if (turn)
+                if (turn) {
                     chess.setWhiteKing(row + "/" + 2);
-                else
+                    nextPhase ++;
+                }
+                    
+                else {
                     chess.setBlackKing(row + "/" + 2);
+                    nextPhase ++;
+                }
+                    
             } 
 
             selectedButton = null;
@@ -284,7 +319,13 @@ public class ChessGUI {
             selectedRow = -1;
             selectedCol = -1;
         }
-    
+        
+
+        if (nextPhase == 2) {
+            nextPhase = 0;
+            notation.nextPhase();
+        }
+
         // Start the timers only if the "New" button is clicked
         if (b == newButton) {
             whiteTimer.start();
@@ -311,51 +352,61 @@ public class ChessGUI {
         }
     }
 
-    private final void setupNewGame() {
-        message.setText("Make your move!");
-    
-        // Reset the board pieces to their initial positions
-        for (int ii = 0; ii < 8; ii++) {
-            for (int jj = 0; jj < 8; jj++) {
-                chessBoardSquares[ii][jj].setIcon(null);  // Clear all icons
-            }
-        }
-    
-        // Set up black pieces
-        for (int ii = 0; ii < STARTING_ROW.length; ii++) {
-            chessBoardSquares[ii][0].setIcon(new ImageIcon(chessPieceImages[BLACK][STARTING_ROW[ii]]));
-        }
-        for (int ii = 0; ii < STARTING_ROW.length; ii++) {
-            chessBoardSquares[ii][1].setIcon(new ImageIcon(chessPieceImages[BLACK][PAWN]));
-        }
-    
-        // Set up white pieces
-        for (int ii = 0; ii < STARTING_ROW.length; ii++) {
-            chessBoardSquares[ii][6].setIcon(new ImageIcon(chessPieceImages[WHITE][PAWN]));
-        }
-        for (int ii = 0; ii < STARTING_ROW.length; ii++) {
-            chessBoardSquares[ii][7].setIcon(new ImageIcon(chessPieceImages[WHITE][STARTING_ROW[ii]]));
-        }
-    
-        // Reset turn and selected piece variables
-        turn = true;
-        selectedButton = null;
-        selectedRow = -1;
-        selectedCol = -1;
-    
-        // Reset the board in the model
-        chess = new Board();
-    
-        // Reset timers
-        whiteTimer.stop();
-        blackTimer.stop();
-        whiteTimeRemaining = 300;
-        blackTimeRemaining = 300;
-        updateTimerLabel(whiteTimerLabel, whiteTimeRemaining);
-        updateTimerLabel(blackTimerLabel, blackTimeRemaining);
-        whiteTimer.start();
-    }
+    public final void setupNewGame() {
+        notation.reset();
+       
+            StartScreen.Start();
+        
+        
 
+                 message.setText("Make your move!");
+    
+                // Reset the board pieces to their initial positions
+                for (int ii = 0; ii < 8; ii++) {
+                    for (int jj = 0; jj < 8; jj++) {
+                        chessBoardSquares[ii][jj].setIcon(null);  // Clear all icons
+                    }
+                }
+            
+                // Set up black pieces
+                for (int ii = 0; ii < STARTING_ROW.length; ii++) {
+                    chessBoardSquares[ii][0].setIcon(new ImageIcon(chessPieceImages[BLACK][STARTING_ROW[ii]]));
+                }
+                for (int ii = 0; ii < STARTING_ROW.length; ii++) {
+                    chessBoardSquares[ii][1].setIcon(new ImageIcon(chessPieceImages[BLACK][PAWN]));
+                }
+            
+                // Set up white pieces
+                for (int ii = 0; ii < STARTING_ROW.length; ii++) {
+                    chessBoardSquares[ii][6].setIcon(new ImageIcon(chessPieceImages[WHITE][PAWN]));
+                }
+                for (int ii = 0; ii < STARTING_ROW.length; ii++) {
+                    chessBoardSquares[ii][7].setIcon(new ImageIcon(chessPieceImages[WHITE][STARTING_ROW[ii]]));
+                }
+            
+                // Reset turn and selected piece variables
+                turn = true;
+                selectedButton = null;
+                selectedRow = -1;
+                selectedCol = -1;
+            
+                // Reset the board in the model
+                chess = new Board();
+            
+                // Reset timers
+                whiteTimer.stop();
+                blackTimer.stop();
+                whiteTimeRemaining = 300;
+                blackTimeRemaining = 300;
+                updateTimerLabel(whiteTimerLabel, whiteTimeRemaining);
+                updateTimerLabel(blackTimerLabel, blackTimeRemaining);
+                whiteTimer.start();
+              //  startIst = 0;
+    }
+        //gameInstance.getFrame().dispose();
+
+    
+ 
     private void toggleTheme() {
         Color bgColor, darkSquareColor, lightSquareColor, toolbarColor, textColor, buttonBgColor, buttonFgColor, timerBgColor, timerColor;
     
@@ -434,16 +485,22 @@ public class ChessGUI {
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                ChessGUI cg = new ChessGUI();
+                notation.createRef();
+                
+
+               
+                ChessGUI gameInstance = new ChessGUI();
                 JFrame f = new JFrame("QuantaChess");
-                f.add(cg.getGui());
+                f.add(gameInstance.getGui());
                 f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 f.setLocationByPlatform(true);
                 f.pack();
                 f.setMinimumSize(f.getSize());
-                f.setVisible(true);
-                //notation testiner = new notation();
-               // testiner.printBoard();
+                f.setVisible(true);  
+
+                //mainGameMaker();
+              
+              
             }
         };
         SwingUtilities.invokeLater(r);
@@ -452,10 +509,24 @@ public class ChessGUI {
     private void forfeitGame() 
     {
             chess.setResign(true);
-            if (turn)
+            if (turn) {
                 JOptionPane.showMessageDialog(gui, "Black wins by resignation!");
-            else 
+                notation.winning(false);
+
+            }
+               
+                
+            else {
                 JOptionPane.showMessageDialog(gui, "White wins by resignation!");
+                notation.winning(true);
+            }
+                
 
     }
+
+  
+
 }
+
+
+   

@@ -2,9 +2,9 @@ package main.model;
 
 public class Rook extends Piece { 
 
-    public Rook(boolean color) 
+    public Rook(boolean color , String type ) 
     {
-        super(color); 
+        super(color, type); 
     } 
 
     public static int castle(int r1, int c1, int r2, int c2, Piece[][] chessboard,boolean turn, boolean check) //castling method 
@@ -70,8 +70,9 @@ public class Rook extends Piece {
 
         if (chessboard[r2][c2] != null) {
             if (chessboard[r1][c1].getColor() == chessboard[r2][c2].getColor())
-            {
-                return false;
+            {   
+                notation.moveOcc(r2,c2, chessboard[r1][c1].getType(),true ); 
+                return false; //??
             }
         }
 
