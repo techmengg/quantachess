@@ -433,7 +433,8 @@ public class Board
         if (checkSquare(kr1, kc1, kr1, kc1, board)) 
         {            
             check = true;
-            
+            notation.checkOcc(false);
+
         }
         else 
             check = false;
