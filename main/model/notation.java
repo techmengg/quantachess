@@ -144,7 +144,7 @@ public class notation {
     //Use After All moves are done
     public static  void nextPhase() {
         progression ++;
-
+        phase();
 
     }
     //Use Before Moves are added
@@ -203,6 +203,7 @@ public class notation {
     }
 
     public static void importToTextFile() throws IOException {
+        saveToFile.filegeneration();
         String fileLocation = saveToFile.getLocation();
         saveToFile.writeNotationtoFile(notationFormatS, notationFormatG, fileLocation );
 
