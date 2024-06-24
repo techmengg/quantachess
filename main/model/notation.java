@@ -61,7 +61,7 @@ public class notation {
     public static void moveOcc(int selectedRow,int selectedCol, String type, boolean capture ) {
 
 
-        String moveTo = notationalBoard[selectedRow][selectedCol];
+        String moveTo = notationalBoard[selectedRow + 1][selectedCol + 1];
        String piece = type;
         String taken ="";
         if (type == "P") {
@@ -122,8 +122,6 @@ public class notation {
     //Use at end of check method (If True)
     public static void checkOcc(boolean checkMate) {
 
-
-       
         if (checkMate == true) {
             notationFormatS += "#";
 

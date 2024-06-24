@@ -433,6 +433,7 @@ public class Board
         if (checkSquare(kr1, kc1, kr1, kc1, board)) 
         {            
             check = true;
+            
         }
         else 
             check = false;
