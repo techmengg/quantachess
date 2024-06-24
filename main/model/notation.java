@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.io.File;
+import java.io.IOException;
+
 import javax.imageio.ImageIO;
 //import javax.swing.JFrame;
 //import javax.swing.JLabel;
@@ -14,17 +16,17 @@ import javax.imageio.ImageIO;
 
 
 public class notation {
-    private String [] alphabet = {"A","B","C","D","E","F","G","H"};
-    private String [] numberStng = {"0","1","2","3","4","5","6","7","8"};
+    private String [] alphabet = {"N","A","B","C","D","E","F","G","H"};
+    private String [] numberStng = {"0","8","7","6","5","4","3","2","1"};
     private String [][] notationalBoard = new String[9][9];
-    private static String  notationFormat = "";
+    private static String  notationFormatG = "asdsadasasdsaddsa";
     private static int progression = 0;
     private static String gameName = "";
     private static String whiteName = "";
     private static String blackName = "";
     private static String hosted = "";
     private static String date = "";
-
+    private static String notationFormatS = "asdsadvvbsfbsdf";
      
 
     public notation() {
@@ -50,44 +52,12 @@ public class notation {
     }
    
 
-
-    public void setup() {
-
-
-       // boolean active = true;
-
-
-        JFrame frame = new JFrame("QuantaChess");
-
-
-        JLabel textDisplay = new JLabel("Enter ");
-
-
-        JButton but1 = new JButton("Confirm");
-
-        
-       // text tle = new text();
-
-
-
-
-        JTextField  t = new JTextField(16);
-
-
-
-        JPanel placements = new JPanel();
-
-
-
-    }
-
-
     public void pawnPromo() {
 
 
 
 
-        notationFormat += "=";
+        notationFormatG += "=";
 
 
 
@@ -105,7 +75,7 @@ public class notation {
 
 
 
-        notationFormat += type + moveTo + " ";
+        notationFormatG += type + moveTo + " ";
 
 
 
@@ -118,7 +88,7 @@ public class notation {
         if (kingSide == false) {
 
 
-            notationFormat += "O-O ";
+            notationFormatG += "O-O ";
 
 
 
@@ -129,7 +99,7 @@ public class notation {
         else if (kingSide == true) {
 
 
-            notationFormat += "O-O-O ";
+            notationFormatG += "O-O-O ";
 
 
 
@@ -139,21 +109,33 @@ public class notation {
 
     }
 
+    public void winning(boolean side ) {
+        if (side == true) {
 
+            //White Side
+            notationFormatS += "1-0";
+
+        }
+        else {
+
+            //Black Side
+            notationFormatS += "0-1";
+        }
+    }
     //Use at end of check method (If True)
     public void checkOcc(boolean checkMate) {
 
 
        
         if (checkMate == true) {
-            notationFormat += "#";
+            notationFormatS += "#";
 
 
 
 
         }
         else {
-            notationFormat += "+";
+            notationFormatS += "+";
 
 
         }
@@ -170,7 +152,7 @@ public class notation {
     }
     //Use Before Moves are added
     public void phase() {
-        notationFormat += progression + ". ";
+        notationFormatG += progression + ". ";
     }
 
 
@@ -179,7 +161,7 @@ public class notation {
     public void captureOcc() {
 
 
-        notationFormat += "x";
+        notationFormatG += "x";
 
 
     }
@@ -191,14 +173,39 @@ public class notation {
         whiteName = nameW;
         blackName = nameB;
 
-        notation.details();
+        StartScreen.ended(true);
+
+        notation.addStartdetails();
 
     }
 
-    public static void details() {
-       System.out.print(gameName + " " + hosted + " " + date + " " + whiteName + " " + blackName);
+    public static void addStartdetails() {
+       notationFormatS += "[Event:" + " '" + gameName + "']\n" + "[Site:" + " '" + hosted + "']\n" + "[Date:" + " '" + date + "']\n" 
+       + "[White:" + " '" + whiteName + "']\n" + "[Black:" + " '" + blackName + "']\n";
+      // System.out.print(gameName + " " + hosted + " " + date + " " + whiteName + " " + blackName);
     
     }
 
+    public static void addTurns() {
+        notationFormatS += "[Rounds:" + " '" + progression + "']\n";
 
-}
+    }
+
+
+    public static void reset() {
+        notationFormatG = "";
+        notationFormatS = "";
+        progression = 0;
+        gameName = "";
+        whiteName = "";
+        blackName = "";
+        hosted = "";
+        date = "";
+    }
+
+    public static void importToTextFile() throws IOException {
+        String fileLocation = saveToFile.getLocation();
+        saveToFile.writeNotationtoFile(notationFormatS, notationFormatG, fileLocation );
+
+    }
+} 

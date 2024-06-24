@@ -10,11 +10,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class StartScreen extends JFrame implements ActionListener {
-    
+
+        static boolean mainGame = false;
      
       // JTextField
 
-
+     
       static JTextField t;
       static JTextField t2;
       static JTextField t3;
@@ -46,7 +47,7 @@ public class StartScreen extends JFrame implements ActionListener {
     
       public static void Start() {
 
-
+            mainGame = false;
 
             f = new JFrame("QuantaChess");
 
@@ -180,5 +181,15 @@ public class StartScreen extends JFrame implements ActionListener {
           }
       }
 
+    public static void ended(boolean start) {
+         mainGame = start;
+
+        
+    }
+
+    public static boolean getMainGame() {
+
+        return mainGame;
+    }
 }
 

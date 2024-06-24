@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.io.File;
+import java.io.IOException;
+
 import javax.imageio.ImageIO;
 
 public class ChessGUI {
@@ -435,14 +437,19 @@ public class ChessGUI {
             @Override
             public void run() {
 
-              
-
                     StartScreen.Start();
+                   
+                    saveToFile.filegeneration();
+                    try {
+                        notation.importToTextFile();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    
+                
 
                 
-                
-
-
                 ChessGUI cg = new ChessGUI();
                 JFrame f = new JFrame("QuantaChess");
                 f.add(cg.getGui());
@@ -463,6 +470,9 @@ public class ChessGUI {
             chess.setResign(true);
             if (turn)
                 JOptionPane.showMessageDialog(gui, "Black wins by resignation!");
+
+
+                
             else 
                 JOptionPane.showMessageDialog(gui, "White wins by resignation!");
 
