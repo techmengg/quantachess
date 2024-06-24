@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 public class StartScreen extends JFrame implements ActionListener {
 
         static boolean mainGame = false;
-     
+       public static ChessGUI gameInstance;
       // JTextField
 
      
@@ -160,7 +160,7 @@ public class StartScreen extends JFrame implements ActionListener {
             f2.setLayout(new FlowLayout());
             f2.setSize(350, 600);
 
-          f2.show();
+            f2.show();
 
 
 
@@ -175,15 +175,8 @@ public class StartScreen extends JFrame implements ActionListener {
               
 
                 notation.grabStartDetails(t.getText(), t2.getText(), t3.getText(), t4.getText(), t5.getText() );
-                ChessGUI cg = new ChessGUI();
-                JFrame f = new JFrame("QuantaChess");
-                f.add(cg.getGui());
-                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                f.setLocationByPlatform(true);
-                f.pack();
-                f.setMinimumSize(f.getSize());
-                f.setVisible(true);      
-                
+                    
+                gameInstance = new ChessGUI();
 
                 f2.dispose();
                 //dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
@@ -201,5 +194,6 @@ public class StartScreen extends JFrame implements ActionListener {
 
         return mainGame;
     }
+    
 }
 

@@ -41,12 +41,21 @@ public class ChessGUI {
     private JButton newButton;
     private JButton themeButton;
     private JButton resignButton;
+    private JFrame f;
+
 
     ChessGUI() {
         initializeGui();
         toggleTheme(); // Set dark theme as default
         whiteTimer.stop(); // Stop the timers initially
         blackTimer.stop();
+         f = new JFrame("QuantaChess");
+                f.add(getGui());
+                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                f.setLocationByPlatform(true);
+                f.pack();
+                f.setMinimumSize(f.getSize());
+                f.setVisible(true);  
     }
 
     public final void initializeGui() {
@@ -314,48 +323,13 @@ public class ChessGUI {
     }
 
     private final void setupNewGame() {
-        message.setText("Make your move!");
-    
-        // Reset the board pieces to their initial positions
-        for (int ii = 0; ii < 8; ii++) {
-            for (int jj = 0; jj < 8; jj++) {
-                chessBoardSquares[ii][jj].setIcon(null);  // Clear all icons
-            }
-        }
-    
-        // Set up black pieces
-        for (int ii = 0; ii < STARTING_ROW.length; ii++) {
-            chessBoardSquares[ii][0].setIcon(new ImageIcon(chessPieceImages[BLACK][STARTING_ROW[ii]]));
-        }
-        for (int ii = 0; ii < STARTING_ROW.length; ii++) {
-            chessBoardSquares[ii][1].setIcon(new ImageIcon(chessPieceImages[BLACK][PAWN]));
-        }
-    
-        // Set up white pieces
-        for (int ii = 0; ii < STARTING_ROW.length; ii++) {
-            chessBoardSquares[ii][6].setIcon(new ImageIcon(chessPieceImages[WHITE][PAWN]));
-        }
-        for (int ii = 0; ii < STARTING_ROW.length; ii++) {
-            chessBoardSquares[ii][7].setIcon(new ImageIcon(chessPieceImages[WHITE][STARTING_ROW[ii]]));
-        }
-    
-        // Reset turn and selected piece variables
-        turn = true;
-        selectedButton = null;
-        selectedRow = -1;
-        selectedCol = -1;
-    
-        // Reset the board in the model
-        chess = new Board();
-    
-        // Reset timers
-        whiteTimer.stop();
-        blackTimer.stop();
-        whiteTimeRemaining = 300;
-        blackTimeRemaining = 300;
-        updateTimerLabel(whiteTimerLabel, whiteTimeRemaining);
-        updateTimerLabel(blackTimerLabel, blackTimeRemaining);
-        whiteTimer.start();
+        notation.reset();
+        StartScreen.Start();
+        StartScreen.gameInstance.getFrame().dispose();
+
+       
+
+
     }
 
     private void toggleTheme() {
@@ -438,7 +412,8 @@ public class ChessGUI {
             public void run() {
 
                 StartScreen.Start();
-                   
+                
+                
               
               
             }
@@ -458,4 +433,12 @@ public class ChessGUI {
                 JOptionPane.showMessageDialog(gui, "White wins by resignation!");
 
     }
+
+    private JFrame getFrame() {
+        return f;
+    }
+
 }
+
+
+   
