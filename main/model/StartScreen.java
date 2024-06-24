@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 public class StartScreen extends JFrame implements ActionListener {
 
         static boolean mainGame = false;
-       public static ChessGUI gameInstance;
+      
       // JTextField
 
      
@@ -36,7 +36,7 @@ public class StartScreen extends JFrame implements ActionListener {
       static JLabel l5;
       static JLabel l6;
       static JLabel l7;
-   
+      static JLabel l8;
       // default constructor
       StartScreen() {
 
@@ -46,7 +46,7 @@ public class StartScreen extends JFrame implements ActionListener {
 
     
       public static void Start() {
-
+             //ChessGUI.stopTimers();
             mainGame = false;
 
             f2 = new JFrame("QuantaChess");
@@ -77,7 +77,7 @@ public class StartScreen extends JFrame implements ActionListener {
              l5 = new JLabel("Date: ");
              l6 = new JLabel("                     (YYYY.MM.DD, ?? If None)  ");
              l7 = new JLabel("                                     ");
-
+             l8 = new JLabel("WARNING: BUTTON WILL GENERATE A TXT FILE ");
            
 
 
@@ -135,6 +135,7 @@ public class StartScreen extends JFrame implements ActionListener {
 
             f2.add(l7);
             f2.add(b);
+            f2.add(l8);
             /*
             
 
@@ -176,8 +177,13 @@ public class StartScreen extends JFrame implements ActionListener {
 
                 notation.grabStartDetails(t.getText(), t2.getText(), t3.getText(), t4.getText(), t5.getText() );
                     
-                gameInstance = new ChessGUI();
-
+              //.setupNewGame();
+              try {
+                notation.importToTextFile();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
                 f2.dispose();
                 //dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
               

@@ -21,14 +21,14 @@ public class Board
         chessBoard[0][5] = new Bishop(false,"B");
         chessBoard[0][6] = new Knight(false,"K");
         chessBoard[0][7] = new Rook(false,"R");
-        chessBoard[1][0] = new Pawn(false);
-        chessBoard[1][1] = new Pawn(false);
-        chessBoard[1][2] = new Pawn(false);
-        chessBoard[1][3] = new Pawn(false);
-        chessBoard[1][4] = new Pawn(false);
-        chessBoard[1][5] = new Pawn(false);
-        chessBoard[1][6] = new Pawn(false);
-        chessBoard[1][7] = new Pawn(false);
+        chessBoard[1][0] = new Pawn(false,"P");
+        chessBoard[1][1] = new Pawn(false,"P");
+        chessBoard[1][2] = new Pawn(false,"P");
+        chessBoard[1][3] = new Pawn(false,"P");
+        chessBoard[1][4] = new Pawn(false,"P");
+        chessBoard[1][5] = new Pawn(false,"P");
+        chessBoard[1][6] = new Pawn(false,"P");
+        chessBoard[1][7] = new Pawn(false,"P");
 
         // white pieces
         chessBoard[7][0] = new Rook(true,"R");
@@ -39,14 +39,14 @@ public class Board
         chessBoard[7][5] = new Bishop(true,"B");
         chessBoard[7][6] = new Knight(true,"K");
         chessBoard[7][7] = new Rook(true,"R");
-        chessBoard[6][0] = new Pawn(true);
-        chessBoard[6][1] = new Pawn(true);
-        chessBoard[6][2] = new Pawn(true);
-        chessBoard[6][3] = new Pawn(true);
-        chessBoard[6][4] = new Pawn(true);
-        chessBoard[6][5] = new Pawn(true);
-        chessBoard[6][6] = new Pawn(true);
-        chessBoard[6][7] = new Pawn(true);   
+        chessBoard[6][0] = new Pawn(true,"P");
+        chessBoard[6][1] = new Pawn(true,"P");
+        chessBoard[6][2] = new Pawn(true,"P");
+        chessBoard[6][3] = new Pawn(true,"P");
+        chessBoard[6][4] = new Pawn(true,"P");
+        chessBoard[6][5] = new Pawn(true,"P");
+        chessBoard[6][6] = new Pawn(true,"P");
+        chessBoard[6][7] = new Pawn(true,"P");   
 
         whiteKing = "7/4";
         blackKing = "0/4";
@@ -73,6 +73,8 @@ public class Board
 
             if (board[r1][c1].canMove(r1, c1, r2, c2, board) && !(board[r1][c1] instanceof King))
             {
+                
+                notation.moveOnly(r2,c2, chessBoard[r1][c1].getType() );
                 board[r2][c2] = board[r1][c1];
                 board[r1][c1] = null;
                 

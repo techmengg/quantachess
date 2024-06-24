@@ -2,9 +2,9 @@ package main.model;
 
 public class Pawn extends Piece
 {
-    public Pawn(boolean color)
+    public Pawn(boolean color,String type)
     {
-        super(color);     
+        super(color,type);     
     }
 
     public boolean canMove(int r1, int c1, int r2, int c2, Piece[][] chessboard)
