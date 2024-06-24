@@ -434,6 +434,10 @@ public class ChessGUI {
         Runnable r = new Runnable() {
             @Override
             public void run() {
+
+                StartScreen.Start();
+
+
                 ChessGUI cg = new ChessGUI();
                 JFrame f = new JFrame("QuantaChess");
                 f.add(cg.getGui());

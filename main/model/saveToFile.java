@@ -2,7 +2,7 @@ package main.model;
 import java.io.File; 
 import java.io.FileWriter; 
 import java.util.ArrayList; 
-
+import java.io.IOException;
 public class saveToFile {
 
     private String fileLocation = "";
@@ -21,21 +21,24 @@ public class saveToFile {
             "main/Saves");
         String location = savesFolder.toString();
 
-
-        allFileLocations.add(import java.io.FileWriter; );
+        //Saves Directory of newly created file 
+        allFileLocations.add(location);
 
 
 
         
     }
 
-    
+    public String getLocation() {
+
+        return fileLocation;
+    }
 
 
-    public void writeNotationtoFile (String notationFormat) throws IOException  {
+    public void writeNotationtoFile (String notationFormat, String fileDirectory) throws IOException {
 
 
-        FileWriter fileWriter = new FileWriter(null);
+        FileWriter fileWriter = new FileWriter(fileDirectory);
 
     }
 

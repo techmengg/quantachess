@@ -1,4 +1,16 @@
 package main.model;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import javax.swing.*;
+import javax.swing.border.*;
+import java.io.File;
+import javax.imageio.ImageIO;
+//import javax.swing.JFrame;
+//import javax.swing.JLabel;
+
+
+
 
 
 public class notation {
@@ -41,7 +53,28 @@ public class notation {
     public void setup() {
 
 
+       // boolean active = true;
 
+
+        JFrame frame = new JFrame("QuantaChess");
+
+
+        JLabel textDisplay = new JLabel("Enter ");
+
+
+        JButton but1 = new JButton("Confirm");
+
+        
+       // text tle = new text();
+
+
+
+
+        JTextField  t = new JTextField(16);
+
+
+
+        JPanel placements = new JPanel();
 
 
 
