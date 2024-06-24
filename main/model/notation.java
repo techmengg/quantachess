@@ -58,18 +58,21 @@ public class notation {
 
     }
     //Use after and or during player move
-    public static void moveOnly(int selectedRow,int selectedCol, String type ) {
+    public static void moveOcc(int selectedRow,int selectedCol, String type, boolean capture ) {
 
 
         String moveTo = notationalBoard[selectedRow][selectedCol];
        String piece = type;
-
+        String taken ="";
         if (type == "P") {
             piece ="";
         }
+        if (capture == true) {
+            taken = "x";
+            
+        }
 
-
-        notationFormatG += piece + moveTo + " ";
+        notationFormatG += piece + taken  + moveTo + " ";
 
 
 

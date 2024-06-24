@@ -6,6 +6,7 @@ public class Queen extends Piece {
     }
 
     public boolean canMove(int r1, int c1, int r2, int c2, Piece[][] chessboard) {
+        boolean cap = false;
         if (r1 == r2 && c1 == c2) {
             return false; // Same position
         }
@@ -13,8 +14,11 @@ public class Queen extends Piece {
         if (chessboard[r2][c2] != null) {
             if (chessboard[r1][c1].getColor() == chessboard[r2][c2].getColor())
             {
-                return false;
+               
+                return false; //??
             }
+            cap = true;
+            notation.moveOcc(r2,c2, chessboard[r1][c1].getType(),cap ); //???
         }
 
         if (r1 == r2) { // Check for horizontal movement

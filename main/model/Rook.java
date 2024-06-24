@@ -70,8 +70,9 @@ public class Rook extends Piece {
 
         if (chessboard[r2][c2] != null) {
             if (chessboard[r1][c1].getColor() == chessboard[r2][c2].getColor())
-            {
-                return false;
+            {   
+                notation.moveOcc(r2,c2, chessboard[r1][c1].getType(),true ); 
+                return false; //??
             }
         }
 

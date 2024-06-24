@@ -23,6 +23,7 @@ public class ChessGUI {
     private static final int BLACK = 0, WHITE = 1;
     private static Board chess = new Board();
     private static boolean turn = true;
+    private static int nextPhase = 0;
     private final JLabel whiteTimerLabel = new JLabel("05:00", SwingConstants.CENTER); // Timer labels
     private final JLabel blackTimerLabel = new JLabel("05:00", SwingConstants.CENTER);
 
@@ -230,6 +231,7 @@ public class ChessGUI {
             chessBoardSquares[col][row].setIcon(selectedButton.getIcon());
            
             selectedButton.setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+
             int promote = chess.promote(row, col, chess.getChessBoard());
             if (promote == 1) {
                 notation.pawnPromo(row,col);
@@ -247,9 +249,11 @@ public class ChessGUI {
             if (turn) {
                 whiteTimer.stop();
                 blackTimer.start();
+                nextPhase ++;
             } else {
                 blackTimer.stop();
                 whiteTimer.start();
+                nextPhase ++;
             }
     
             turn = !turn;
@@ -270,11 +274,16 @@ public class ChessGUI {
                 chessBoardSquares[5][selectedRow].setIcon(new ImageIcon(chessPieceImages[pcol][ROOK]));  
                 chessBoardSquares[col][row].setIcon(null); // removes the king image from it's position
                 chessBoardSquares[6][row].setIcon(new ImageIcon(chessPieceImages[pcol][QUEEN]));  
-                if (turn)
+                if (turn) {
                     chess.setWhiteKing(row + "/" + 6);
-                else
+                    nextPhase ++;
+                }
+                    
+                else {
                     chess.setBlackKing(row + "/" + 6);
-
+                    nextPhase ++;
+                }
+                    
             }   
             if(type == 2) 
             { 
@@ -287,10 +296,16 @@ public class ChessGUI {
                 chessBoardSquares[3][selectedRow].setIcon(new ImageIcon(chessPieceImages[pcol][ROOK])); 
                 chessBoardSquares[col][row].setIcon(null); 
                 chessBoardSquares[2][row].setIcon(new ImageIcon(chessPieceImages[pcol][QUEEN]));  
-                if (turn)
+                if (turn) {
                     chess.setWhiteKing(row + "/" + 2);
-                else
+                    nextPhase ++;
+                }
+                    
+                else {
                     chess.setBlackKing(row + "/" + 2);
+                    nextPhase ++;
+                }
+                    
             } 
 
             selectedButton = null;
@@ -304,7 +319,13 @@ public class ChessGUI {
             selectedRow = -1;
             selectedCol = -1;
         }
-    
+        
+
+        if (nextPhase == 2) {
+            nextPhase = 0;
+            notation.nextPhase();
+        }
+
         // Start the timers only if the "New" button is clicked
         if (b == newButton) {
             whiteTimer.start();

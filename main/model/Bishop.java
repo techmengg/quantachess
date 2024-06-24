@@ -20,13 +20,16 @@ public class Bishop extends Piece
 
             }
             else {
+                notation.moveOcc(r2,c2, chessboard[r1][c1].getType(),true );
                 return true;
+
             }
 
                 }
            // System.out.println(false);
 
         if (isDiagonalClear(r1, c1, r2, c2, chessboard) == true) {
+            notation.moveOcc(r2,c2, chessboard[r1][c1].getType(),false );
             return true;
         }
         else {

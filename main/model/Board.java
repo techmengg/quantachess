@@ -74,7 +74,7 @@ public class Board
             if (board[r1][c1].canMove(r1, c1, r2, c2, board) && !(board[r1][c1] instanceof King))
             {
                 
-                notation.moveOnly(r2,c2, chessBoard[r1][c1].getType() );
+                
                 board[r2][c2] = board[r1][c1];
                 board[r1][c1] = null;
                 
