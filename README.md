@@ -37,7 +37,9 @@ QuantaChess is a simple chess game implemented in Java with a graphical user int
   <img src="assets/chessblack.png" alt="Screenshot 2" width="400"/>
 </div>
 
+## Notes
 
+- **Finish** - Before clicking the confirm button on the quantachess start screen, complete the match and then enter all related information in the text fields.
 
 ## Controls
 
