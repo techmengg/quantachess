@@ -44,6 +44,7 @@ public class Queen extends Piece {
                 return false; // Path is blocked
             }
         }
+        notation.moveOcc(r,c2, chessboard[r][c1].getType(),false ); 
         return true; // Path is clear
     }
 
@@ -55,6 +56,7 @@ public class Queen extends Piece {
                 return false; // Path is blocked
             }
         }
+        notation.moveOcc(r2,c, chessboard[r1][c].getType(),false ); 
         return true; // Path is clear
     }
 
@@ -70,6 +72,7 @@ public class Queen extends Piece {
             r += dr;
             c += dc;
         }
+        notation.moveOcc(r2,c2, chessboard[r1][c1].getType(),false ); 
         return true; // Path is clear
     }
 }
