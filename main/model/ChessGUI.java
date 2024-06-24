@@ -437,30 +437,10 @@ public class ChessGUI {
             @Override
             public void run() {
 
-                    StartScreen.Start();
+                StartScreen.Start();
                    
-                    saveToFile.filegeneration();
-                    
-                    try {
-                        notation.importToTextFile();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    
-                
-
-                
-                ChessGUI cg = new ChessGUI();
-                JFrame f = new JFrame("QuantaChess");
-                f.add(cg.getGui());
-                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                f.setLocationByPlatform(true);
-                f.pack();
-                f.setMinimumSize(f.getSize());
-                f.setVisible(true);
-                //notation testiner = new notation();
-               // testiner.printBoard();
+              
+              
             }
         };
         SwingUtilities.invokeLater(r);

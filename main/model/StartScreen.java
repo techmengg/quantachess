@@ -23,7 +23,7 @@ public class StartScreen extends JFrame implements ActionListener {
       static JTextField t5;
 
       // JFrame
-      static JFrame f;
+      static JFrame f2;
    
       // JButton
       static JButton b;
@@ -49,14 +49,14 @@ public class StartScreen extends JFrame implements ActionListener {
 
             mainGame = false;
 
-            f = new JFrame("QuantaChess");
+            f2 = new JFrame("QuantaChess");
 
             try {
                 
                 File file = new File("main/img/QuantaChesslogo3Test2.png");
                 BufferedImage logo = ImageIO.read(file);
                 JLabel imageLogo = new JLabel(new ImageIcon(logo));
-                f.add(imageLogo);
+                f2.add(imageLogo);
 
             }
             catch (Exception e) {
@@ -113,28 +113,28 @@ public class StartScreen extends JFrame implements ActionListener {
 
             // add buttons and textfield to panel
            
-            f.add(l);
-             f.add(t);
+            f2.add(l);
+             f2.add(t);
             
-            f.add(l2);
-            f.add(t2);
+            f2.add(l2);
+            f2.add(t2);
 
-            f.add(l3);
-            f.add(t3);
+            f2.add(l3);
+            f2.add(t3);
 
 
 
-            f.add(l4);
-            f.add(t4);
+            f2.add(l4);
+            f2.add(t4);
             
 
-            f.add(l5);
-            f.add(t5);
-            f.add(l6);
+            f2.add(l5);
+            f2.add(t5);
+            f2.add(l6);
 
 
-            f.add(l7);
-            f.add(b);
+            f2.add(l7);
+            f2.add(b);
             /*
             
 
@@ -157,10 +157,10 @@ public class StartScreen extends JFrame implements ActionListener {
             
 
             // set the size of frame
-            f.setLayout(new FlowLayout());
-            f.setSize(350, 600);
+            f2.setLayout(new FlowLayout());
+            f2.setSize(350, 600);
 
-          f.show();
+          f2.show();
 
 
 
@@ -175,7 +175,17 @@ public class StartScreen extends JFrame implements ActionListener {
               
 
                 notation.grabStartDetails(t.getText(), t2.getText(), t3.getText(), t4.getText(), t5.getText() );
-                f.dispose();
+                ChessGUI cg = new ChessGUI();
+                JFrame f = new JFrame("QuantaChess");
+                f.add(cg.getGui());
+                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                f.setLocationByPlatform(true);
+                f.pack();
+                f.setMinimumSize(f.getSize());
+                f.setVisible(true);      
+                
+
+                f2.dispose();
                 //dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
               
           }
